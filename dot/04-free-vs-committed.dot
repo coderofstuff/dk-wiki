@@ -1,0 +1,29 @@
+digraph free_vs_committed {
+    rankdir=RL;
+    node [shape=circle, style=filled, fontsize=10];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="Free Search vs Committed Search";
+    labelloc=t;
+
+    V [label="Virtual", fillcolor=lightyellow, shape=box];
+
+    B [label="B", fillcolor=lightskyblue];
+    C [label="C", fillcolor=lightyellow];
+    D [label="D", fillcolor=lightskyblue];
+    E [label="E", fillcolor=lightyellow];
+    F [label="F\n(CG)", fillcolor=orange, shape=doublecircle];
+
+    // Edges point backwards (newer → older)
+    V -> B;
+    V -> C;
+    B -> D [color=blue, penwidth=2.0];
+    C -> E [style=dashed, color=red];
+    D -> F [color=blue, penwidth=2.0];
+    E -> F [style=dashed, color=red];
+
+    subgraph cluster_annotation {
+        style=invis;
+        NOTE [label="Committed (free_search=false):\n  Only follows agreeing parents\n  Virtual → C → E → F\n\nFree Search (free_search=true):\n  Considers ALL parents\n  Picks parent with max blue work\n  Virtual → B → D → F", shape=box, style=filled, fillcolor=lightcyan, fontsize=9];
+    }
+}

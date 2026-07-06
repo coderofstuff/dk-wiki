@@ -1,0 +1,20 @@
+digraph tie_breaking_flow {
+    rankdir=TB;
+    node [shape=box, style=filled, fontsize=9];
+    edge [arrowsize=0.6];
+
+    label="Tie-Breaking Algorithm 4: Step-by-Step Flow";
+    labelloc=t;
+
+    INPUT [label="Input: tied subgroups P₁, P₂, ...\nwith mutual rank k", fillcolor=lightyellow];
+
+    STEP1 [label="Step 1: Reference Cluster F\nK-Colouring(virtual, G, g(k)=floor(sqrt(k)),\nfree_search=true)", fillcolor=lightskyblue];
+
+    STEP2 [label="Step 2: For each subgroup Pᵢ:\n  For k' in [floor(k/2), ..., k]:\n    Compute conditioned chain at k'\n  Find high-rank witnesses Cᵢ", fillcolor=lightcyan];
+
+    STEP3 [label="Step 3: Winner = argminᵢ blue_work(max(Cᵢ))\nSubgroup whose latest witness is earliest\n(lowest blue work) wins", fillcolor=lightgreen];
+
+    OUTPUT [label="Output: winning subgroup Pⱼ\nForces attacker to compete on lower ranks", fillcolor=lightgreen];
+
+    INPUT -> STEP1 -> STEP2 -> STEP3 -> OUTPUT;
+}

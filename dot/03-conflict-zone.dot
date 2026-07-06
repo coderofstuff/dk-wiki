@@ -1,0 +1,40 @@
+digraph conflict_zone {
+    rankdir=BT;
+    node [shape=circle, style=filled, fontsize=10];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="Conflict Zone: future(CG) ∩ past(tips)\nThis is the only region DAGKnight needs to analyze";
+    labelloc=t;
+
+    F [label="F\n(tip)", fillcolor=lightskyblue];
+    G [label="G\n(tip)", fillcolor=lightyellow];
+    D [label="D", fillcolor=lightskyblue];
+    E [label="E", fillcolor=lightyellow];
+    C [label="C\n(conflict genesis)", fillcolor=orange, shape=doublecircle];
+    B [label="B", fillcolor=lightgray];
+    GEN [label="genesis", fillcolor=lightgray];
+
+    // Edges point backwards (newer → older)
+    F -> D;
+    G -> E;
+    D -> C;
+    E -> C;
+    C -> B;
+    B -> GEN;
+
+    // Conflict zone: between CG and tips (this is what DAGKnight analyzes)
+    subgraph cluster_zone {
+        label="Conflict Zone\nfuture(CG) ∩ past(tips)\nDAGKnight analyzes this region";
+        style=filled;
+        fillcolor=moccasin;
+        D; E; F; G; C;
+    }
+
+    // Resolved: below CG (already settled, no re-analysis needed)
+    subgraph cluster_resolved {
+        label="Already Resolved\nbelow conflict genesis\norder is stable";
+        style=filled;
+        fillcolor=lightgray;
+        GEN; B;
+    }
+}

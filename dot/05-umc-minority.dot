@@ -1,0 +1,28 @@
+digraph umc_minority_fail {
+    rankdir=RL;
+    node [shape=circle, style=filled, fontsize=9];
+    edge [arrowsize=0.5, color=gray60];
+
+    label="UMC Voting: Minority Blues → FAIL";
+    labelloc=t;
+
+    GEN [label="1\n(blue)", fillcolor=lightskyblue, shape=doublecircle];
+    B2 [label="2\n(blue)", fillcolor=lightskyblue];
+    B3 [label="3\n(red)", fillcolor=salmon];
+    B4 [label="4\n(blue)", fillcolor=lightskyblue];
+    B5 [label="5\n(red)", fillcolor=salmon];
+    B6 [label="6\n(red)", fillcolor=salmon];
+
+    // Edges point backwards (newer → older)
+    B6 -> B4;
+    B6 -> B5;
+    B4 -> B2;
+    B5 -> B3;
+    B2 -> GEN;
+    B3 -> GEN;
+
+    subgraph cluster_result {
+        style=invis;
+        RESULT [label="Blues: {1,2,4} → minority\nReds: {3,5,6} → majority\n\nvote(GEN) = negative → UMC fails", shape=box, style=filled, fillcolor=mistyrose, fontsize=9];
+    }
+}

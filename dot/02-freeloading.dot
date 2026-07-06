@@ -1,0 +1,58 @@
+digraph freeloading_attack {
+    rankdir=BT;
+    node [shape=circle, style=filled, fontsize=9];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="Freeloading attack on PHANTOM (k=5) — DK paper example\nHonest chain (blue) vs attacker chain (red, dashed)";
+    labelloc=t;
+
+    GEN [label="1\n(genesis)", fillcolor=orange, shape=doublecircle];
+
+    // Honest chain
+    H2 [label="2", fillcolor=lightskyblue];
+    H3 [label="3", fillcolor=lightskyblue];
+    H4 [label="4", fillcolor=lightskyblue];
+    H5 [label="5", fillcolor=lightskyblue];
+    H6 [label="6", fillcolor=lightskyblue];
+    H7 [label="7", fillcolor=lightskyblue];
+    H8 [label="8", fillcolor=lightskyblue];
+    H9 [label="9", fillcolor=lightskyblue];
+    H10 [label="10", fillcolor=lightskyblue];
+    H11 [label="11", fillcolor=lightskyblue];
+
+    // Attacker chain
+    A12 [label="12", fillcolor=salmon, style="filled,dashed"];
+    A13 [label="13", fillcolor=salmon, style="filled,dashed"];
+    A14 [label="14", fillcolor=salmon, style="filled,dashed"];
+    A15 [label="15", fillcolor=salmon, style="filled,dashed"];
+    A16 [label="16", fillcolor=salmon, style="filled,dashed"];
+
+    // Connection block
+    H17 [label="17", fillcolor=lightskyblue];
+
+    // Edges point backwards (newer → older)
+    H17 -> H6;
+    H17 -> A16;
+    H11 -> H10;
+    H10 -> H8;
+    H10 -> H9;
+    H8 -> H7;
+    H9 -> H7;
+    H7 -> H6;
+    H6 -> H5;
+    H5 -> H4;
+    H4 -> H3;
+    H3 -> H2;
+    H2 -> GEN;
+    A16 -> A15;
+    A15 -> A14;
+    A14 -> A13;
+    A13 -> A12;
+    A12 -> GEN;
+
+    // Annotation
+    subgraph cluster_annotation {
+        style=invis;
+        NOTE [label="Attacker chain (12→13→14→15→16)\nhas 5 blocks in the anticone of the honest chain.\nWith k=5, all attacker blocks fit in the 5-cluster,\nso they get ordered before honest blocks 2–7.\nBlock 17 connects both chains.", shape=box, style=filled, fillcolor=lightyellow, fontsize=8];
+    }
+}

@@ -1,0 +1,35 @@
+digraph representative_problem {
+    rankdir=RL;
+    node [shape=circle, style=filled, fontsize=10];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="Attacker blocks that agree with honest subgroup but are red\nWithout gray-blocks, T1,T2 cast negative votes and hurt the honest subgroup";
+    labelloc=t;
+
+    H [label="H\n(blue)", fillcolor=lightskyblue];
+    E [label="E\n(blue)", fillcolor=lightskyblue];
+    B [label="B\n(blue)", fillcolor=lightskyblue];
+    C [label="C\n(blue)", fillcolor=lightskyblue];
+    A [label="A\n(blue)", fillcolor=lightskyblue];
+    T1 [label="T1\n(red, agrees)", fillcolor=salmon, style="filled,dashed"];
+    T2 [label="T2\n(red, agrees)", fillcolor=salmon, style="filled,dashed"];
+    CG [label="CG", fillcolor=orange, shape=doublecircle];
+
+    // Edges point backwards (newer → older)
+    H -> E;
+    H -> C;
+    E -> B;
+    C -> A;
+    C -> T2;
+    T2 -> T1;
+    T1 -> B;
+    B -> CG;
+    A -> CG;
+
+    subgraph cluster_legend {
+        style=invis;
+        L_BLUE [label="Blue (honest cluster)", fillcolor=lightskyblue, shape=box, style=filled];
+        L_RED [label="Red (attacker, agrees with honest)\n→ neutralized as gray", fillcolor=salmon, shape=box, style="filled,dashed"];
+        L_CG [label="Conflict Genesis", fillcolor=orange, shape=box, style=filled];
+    }
+}

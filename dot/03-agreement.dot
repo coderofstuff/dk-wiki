@@ -1,0 +1,30 @@
+digraph agreement_example {
+    rankdir=RL;
+    node [shape=circle, style=filled, fontsize=10];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="Agreement: blocks sharing a chain extension above the conflict genesis";
+    labelloc=t;
+
+    A [label="A\n(conflict genesis)", fillcolor=orange, shape=doublecircle];
+    B [label="B", fillcolor=lightskyblue];
+    C [label="C", fillcolor=lightyellow];
+    D [label="D", fillcolor=lightskyblue];
+    E [label="E", fillcolor=lightyellow];
+    F [label="F", fillcolor=lightskyblue];
+    G [label="G", fillcolor=lightyellow];
+
+    // Edges point backwards (newer → older)
+    F -> D [color=blue, penwidth=2.0];
+    G -> E;
+    D -> B [color=blue, penwidth=2.0];
+    E -> C;
+    B -> A [color=blue, penwidth=2.0];
+    C -> A;
+
+    // Annotation
+    subgraph cluster_annotation {
+        style=invis;
+        NOTE [label="Chain: A → B → D → F\n\nD and F AGREE (share chain above A)\nD and E do NOT agree\nF and G do NOT agree", shape=box, style=filled, fillcolor=lightcyan, fontsize=9];
+    }
+}

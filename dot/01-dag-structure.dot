@@ -1,0 +1,44 @@
+digraph dag_structure {
+    rankdir=BT;
+    node [shape=circle, style=filled, fontsize=10];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="Block DAG: edges point backwards in time (child → parent)\nT1 references B2 and B3; B2 and B3 are concurrent (in each other's anticone)";
+    labelloc=t;
+
+    subgraph cluster_tips {
+        labelloc="t";
+        label="Tips";
+        style="filled,dashed";
+        fillcolor=lightyellow;
+        T1 [label="T1", fillcolor=lightskyblue];
+        T2 [label="T2", fillcolor=lightskyblue];
+    }
+
+    B2 [label="B2", fillcolor=lightskyblue];
+    B3 [label="B3", fillcolor=lightskyblue];
+    B1 [label="B1", fillcolor=lightskyblue];
+    B4 [label="B4", fillcolor=lightskyblue];
+    B5 [label="B5", fillcolor=lightskyblue];
+
+   subgraph cluster_genesis {
+        labelloc="b";
+        label="Genesis";
+        style="filled,dashed";
+        fillcolor=mistyrose;
+        GEN [label="G", fillcolor=orange, shape=doublecircle];
+    }
+
+    // Edges point backwards (newer → older)
+    T1 -> B2;
+    T1 -> B3;
+    T2 -> B2;
+    T2 -> B3;
+    B2 -> B1;
+    B2 -> B4;
+    B3 -> B4;
+    B3 -> B5;
+    B1 -> GEN;
+    B4 -> GEN;
+    B5 -> GEN;
+}

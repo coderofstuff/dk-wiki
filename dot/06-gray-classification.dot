@@ -1,0 +1,49 @@
+digraph gray_classification {
+    rankdir=BT;
+    node [shape=circle, style=filled, fontsize=10];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="Gray Block Classification: red blocks that agree with the winning subgroup are neutralized";
+    labelloc=t;
+
+    V [label="Virtual", fillcolor=lightyellow, shape=box];
+    VSP [label="VSP", fillcolor=lightskyblue];
+    W1 [label="W1", fillcolor=lightskyblue];
+    W2 [label="W2", fillcolor=lightskyblue];
+    W3 [label="W3", fillcolor=lightskyblue];
+    CG [label="CG", fillcolor=orange, shape=doublecircle];
+
+    // R1 — red, disagrees (chain ancestor above CG is different from winning subgroup's)
+    R1 [label="R1\n(red, disagrees)", fillcolor=salmon];
+
+    // G1, G2 — gray, agree (chain ancestor above CG matches winning subgroup's)
+    G1 [label="G1\n(gray, agrees)", fillcolor=lightgray];
+    G2 [label="G2\n(gray, agrees)", fillcolor=lightgray];
+
+    // Winning chain: V → VSP → W1 → W2 → W3 → CG
+    V -> VSP [color=blue, penwidth=2];
+    VSP -> W1 [color=blue, penwidth=2];
+    W1 -> W2 [color=blue, penwidth=2];
+    W2 -> W3 [color=blue, penwidth=2];
+    W3 -> CG [color=blue, penwidth=2];
+
+    // R1 branches from W3, goes to a different chain path above CG
+    W3 -> R1;
+    R1 -> CG;
+
+    // G1 shares chain path with winning subgroup (agrees)
+    VSP -> G1;
+    G1 -> W1;
+
+    // G2 shares chain path with winning subgroup (agrees)
+    W1 -> G2;
+    G2 -> W2;
+
+    subgraph cluster_legend {
+        style=invis;
+        L_BLUE [label="Blue (cluster)\n→ votes +1 in UMC", fillcolor=lightskyblue, shape=box, style=filled];
+        L_RED [label="Red (disagrees)\n→ votes −1 in UMC", fillcolor=salmon, shape=box, style=filled];
+        L_GRAY [label="Gray (agrees with winner)\n→ neutral, no vote", fillcolor=lightgray, shape=box, style=filled];
+        L_CG [label="Conflict Genesis", fillcolor=orange, shape=box, style=filled];
+    }
+}

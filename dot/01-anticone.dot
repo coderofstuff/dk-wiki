@@ -1,0 +1,59 @@
+digraph anticone_visualization {
+    rankdir=RL;
+    node [shape=circle, style=filled, fontsize=10];
+    edge [arrowsize=0.5, color=gray60];
+
+    label="Anticone of block B: all blocks concurrent with B\n(neither in the past of B, nor in the future of B, nor B itself)";
+    labelloc=t;
+
+    // Past — shared by B and anticone blocks (left column)
+    subgraph cluster_past {
+        label="past(B)\n(shared ancestors)";
+        style=filled;
+        fillcolor=mistyrose;
+        P1 [label="P1", fillcolor=lightblue];
+        P2 [label="P2", fillcolor=lightblue];
+        P3 [label="P3", fillcolor=lightblue];
+    }
+
+    // Middle column: B (top) and anticone cluster (bottom) — B is NOT in its own anticone
+    B [label="B", fillcolor=gold, shape=doublecircle];
+
+    subgraph cluster_anticone {
+        label="anticone(B)\n(parallel to B)";
+        style=filled;
+        fillcolor=lightyellow;
+        A1 [label="A1", fillcolor=lightsalmon];
+        A2 [label="A2", fillcolor=lightsalmon];
+    }
+
+    // Future — shared by B and anticone blocks (right column)
+    subgraph cluster_future {
+        label="future(B)\n(shared descendants)";
+        style=filled;
+        fillcolor=honeydew;
+        F1 [label="F1", fillcolor=lightgreen];
+        F2 [label="F2", fillcolor=lightgreen];
+    }
+
+    // Past → B (B references its ancestors)
+    B -> P1;
+    B -> P2;
+    B -> P3;
+
+    // Past → anticone blocks (they reference the SAME ancestors as B)
+    A1 -> P1;
+    A1 -> P2;
+    A2 -> P2;
+    A2 -> P3;
+
+    // Future blocks reference B (B is an ancestor of future blocks)
+    F1 -> B;
+    F2 -> B;
+
+    // Future blocks ALSO reference anticone blocks (they share the same future)
+    F1 -> A1;
+    F1 -> A2;
+    F2 -> A1;
+    F2 -> A2;
+}
