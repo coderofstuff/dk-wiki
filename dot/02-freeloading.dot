@@ -1,38 +1,45 @@
 digraph freeloading_attack {
-    rankdir=BT;
+    rankdir=TB;
     node [shape=circle, style=filled, fontsize=9];
     edge [arrowsize=0.6, color=gray60];
 
-    label="Freeloading attack on PHANTOM (k=5) — DK paper example\nHonest chain (blue) vs attacker chain (red, dashed)";
+    label="Freeloading attack on PHANTOM (k=5) — DAGKnight whitepaper example\nAttacker creates chain A1→A2→A3→A4→A5→A6 referencing H6.\nAt k=5, all attacker blocks fit in the 5-cluster (blue, dashed).\nHonest blocks H7–H11 are excluded (red) — the attack succeeds.\nWithout DAGKnight's adaptive rank, the attacker wins.";
     labelloc=t;
 
-    GEN [label="1\n(genesis)", fillcolor=orange, shape=doublecircle];
+    GEN [label="H1\n(genesis)", fillcolor=orange, shape=doublecircle];
 
-    // Honest chain
-    H2 [label="2", fillcolor=lightskyblue];
-    H3 [label="3", fillcolor=lightskyblue];
-    H4 [label="4", fillcolor=lightskyblue];
-    H5 [label="5", fillcolor=lightskyblue];
-    H6 [label="6", fillcolor=lightskyblue];
-    H7 [label="7", fillcolor=lightskyblue];
-    H8 [label="8", fillcolor=lightskyblue];
-    H9 [label="9", fillcolor=lightskyblue];
-    H10 [label="10", fillcolor=lightskyblue];
-    H11 [label="11", fillcolor=lightskyblue];
+    // Honest blocks that survive (in the k=5 cluster)
+    H2 [label="H2", fillcolor=lightskyblue];
+    H3 [label="H3", fillcolor=lightskyblue];
+    H4 [label="H4", fillcolor=lightskyblue];
+    H5 [label="H5", fillcolor=lightskyblue];
+    H6 [label="H6", fillcolor=lightskyblue];
 
-    // Attacker chain
-    A12 [label="12", fillcolor=salmon, style="filled,dashed"];
-    A13 [label="13", fillcolor=salmon, style="filled,dashed"];
-    A14 [label="14", fillcolor=salmon, style="filled,dashed"];
-    A15 [label="15", fillcolor=salmon, style="filled,dashed"];
-    A16 [label="16", fillcolor=salmon, style="filled,dashed"];
+    // Attacker blocks — BLUE because k=5 includes them in the cluster
+    A1 [label="A1", fillcolor=lightskyblue, style="filled,dashed"];
+    A2 [label="A2", fillcolor=lightskyblue, style="filled,dashed"];
+    A3 [label="A3", fillcolor=lightskyblue, style="filled,dashed"];
+    A4 [label="A4", fillcolor=lightskyblue, style="filled,dashed"];
+    A5 [label="A5", fillcolor=lightskyblue, style="filled,dashed"];
 
-    // Connection block
-    H17 [label="17", fillcolor=lightskyblue];
+    // Attacker block A6 connects both chains — BLUE (cluster member)
+    A6 [label="A6", fillcolor=lightskyblue, style="filled,dashed"];
+
+    // Honest blocks excluded by the attack — RED
+    H7 [label="H7", fillcolor=salmon];
+    H8 [label="H8", fillcolor=salmon];
+    H9 [label="H9", fillcolor=salmon];
+    H10 [label="H10", fillcolor=salmon];
+    H11 [label="H11", fillcolor=salmon];
+
+    // Virtual block
+    V [label="V\n(virtual)", fillcolor=none, style="dashed", shape=circle];
 
     // Edges point backwards (newer → older)
-    H17 -> H6;
-    H17 -> A16;
+    V -> H11;
+    V -> A6;
+    A6 -> H6;
+    A6 -> A5;
     H11 -> H10;
     H10 -> H8;
     H10 -> H9;
@@ -44,15 +51,9 @@ digraph freeloading_attack {
     H4 -> H3;
     H3 -> H2;
     H2 -> GEN;
-    A16 -> A15;
-    A15 -> A14;
-    A14 -> A13;
-    A13 -> A12;
-    A12 -> GEN;
-
-    // Annotation
-    subgraph cluster_annotation {
-        style=invis;
-        NOTE [label="Attacker chain (12→13→14→15→16)\nhas 5 blocks in the anticone of the honest chain.\nWith k=5, all attacker blocks fit in the 5-cluster,\nso they get ordered before honest blocks 2–7.\nBlock 17 connects both chains.", shape=box, style=filled, fillcolor=lightyellow, fontsize=8];
-    }
+    A5 -> A4;
+    A4 -> A3;
+    A3 -> A2;
+    A2 -> A1;
+    A1 -> GEN;
 }

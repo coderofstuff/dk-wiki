@@ -57,13 +57,13 @@ The largest k-cluster (where k ≈ D × λ, with D being network delay and λ be
 
 Consider a network with very low latency (blocks form an almost-linear chain). PHANTOM is parameterized with k = 5 for safety.
 
-The attacker creates a separate chain of 5 blocks (12→13→14→15→16) starting from genesis, concurrent with the honest chain (2→3→4→5→6→7). Block 17 connects both chains.
+The attacker creates a chain of blocks (A1→A2→A3→A4→A5) starting from genesis, concurrent with the honest chain. Block A6 connects both chains by referencing H6 and A5. This example is taken from the DAGKnight whitepaper.
 
 ![Freeloading attack on PHANTOM](png/02-freeloading.png)
 
-Because k = 5, the attacker's chain has at most 5 concurrent blocks within the honest chain. PHANTOM includes all attacker blocks in the largest 5-cluster, ordering them before honest blocks 2–7. The attacker rides along with the honest chain's proof-of-work without contributing meaningful work.
+Because k = 5, all attacker blocks fit in the 5-cluster and are colored **blue** (cluster members). The honest blocks H7–H11 are excluded and colored **red**. The attacker wins — honest blocks are pushed out of the cluster by attacker blocks.
 
-This is called **freeloading** — the attacker exploits the fixed k parameter to inject blocks into the cluster.
+This is called **freeloading** — the attacker exploits the fixed k parameter to inject blocks into the cluster, using the honest network's work to boost their own total work while pushing honest blocks out.
 
 ## Why Parameterization Is a Problem
 
@@ -104,6 +104,18 @@ KNIGHT: Find the MINIMUM k such that the largest k-cluster covers at least 50% o
 This is a **dual optimization**:
 - **Minimize k** — to exclude attacker blocks (smaller k means fewer blocks can freeload)
 - **Maximize k-cluster size** — to ensure enough honest blocks are included (need >50% coverage)
+
+### Same DAG, DAGKnight's Result
+
+Applying DAGKnight to the same freeloading DAG above, it searches for the minimum k and finds that **k = 0** is sufficient to cover the majority:
+
+![DAGKnight response to the same freeloading DAG](png/02-dagknight-response.png)
+
+All attacker blocks (A1–A6) are **red** (excluded). All honest blocks are **blue** except H8, which is **gray**. DAGKnight selects the honest chain as the k=0 cluster, neutralizing the attack entirely.
+
+### Gray Blocks (Deviation from the Paper)
+
+This example is also from the DAGKnight paper showing how it would color this conflict zone. As a deviation from the original paper, notice that H8 is gray. Gray blocks will be discussed in detail in future chapters. Simply put, they are red blocks (not in the cluster) but they don't vote against the winning side of the conflict, so they are effectively ignored.
 
 The minimum k that satisfies the majority condition is called the **rank** of the DAG (more on this in Chapter 06).
 

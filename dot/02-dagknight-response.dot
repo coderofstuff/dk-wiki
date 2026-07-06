@@ -1,0 +1,57 @@
+digraph dagknight_response {
+    rankdir=TB;
+    node [shape=circle, style=filled, fontsize=9];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="DAGKnight response: k=0 is sufficient — attacker blocks (red) excluded, honest blocks (blue) selected";
+    labelloc=t;
+
+    GEN [label="H1\n(genesis)", fillcolor=orange, shape=doublecircle];
+
+    // Honest blocks — BLUE (in the k=0 cluster)
+    H2 [label="H2", fillcolor=lightskyblue];
+    H3 [label="H3", fillcolor=lightskyblue];
+    H4 [label="H4", fillcolor=lightskyblue];
+    H5 [label="H5", fillcolor=lightskyblue];
+    H6 [label="H6", fillcolor=lightskyblue];
+    H7 [label="H7", fillcolor=lightskyblue];
+    H9 [label="H9", fillcolor=lightskyblue];
+    H10 [label="H10", fillcolor=lightskyblue];
+    H11 [label="H11", fillcolor=lightskyblue];
+
+    // Attacker blocks — RED (excluded at k=0)
+    A1 [label="A1", fillcolor=salmon];
+    A2 [label="A2", fillcolor=salmon];
+    A3 [label="A3", fillcolor=salmon];
+    A4 [label="A4", fillcolor=salmon];
+    A5 [label="A5", fillcolor=salmon];
+    A6 [label="A6", fillcolor=salmon];
+
+    // H8 — GRAY (red block that agrees with the winning side)
+    H8 [label="H8", fillcolor=lightgray];
+
+    // Virtual block
+    V [label="V\n(virtual)", fillcolor=none, style="dashed", shape=circle];
+
+    // Edges point backwards (newer → older)
+    V -> H11;
+    V -> A6;
+    A6 -> H6;
+    A6 -> A5;
+    H11 -> H10;
+    H10 -> H8;
+    H10 -> H9;
+    H8 -> H7;
+    H9 -> H7;
+    H7 -> H6;
+    H6 -> H5;
+    H5 -> H4;
+    H4 -> H3;
+    H3 -> H2;
+    H2 -> GEN;
+    A5 -> A4;
+    A4 -> A3;
+    A3 -> A2;
+    A2 -> A1;
+    A1 -> GEN;
+}
