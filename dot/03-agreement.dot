@@ -1,30 +1,65 @@
 digraph agreement_example {
-    rankdir=RL;
-    node [shape=circle, style=filled, fontsize=10];
+    rankdir=BT;
+    nodesep=0.8;
+    ranksep=0.1;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
-    label="Agreement: blocks sharing a chain extension above the conflict genesis";
-    labelloc=t;
+    label="Agreement: blocks sharing a chain-parent path above the conflict genesis";
 
-    A [label="A\n(conflict genesis)", fillcolor=orange, shape=doublecircle];
-    B [label="B", fillcolor=lightskyblue];
-    C [label="C", fillcolor=lightyellow];
-    D [label="D", fillcolor=lightskyblue];
-    E [label="E", fillcolor=lightyellow];
-    F [label="F", fillcolor=lightskyblue];
-    G [label="G", fillcolor=lightyellow];
+    CG [label="CG", fillcolor=orange, shape=doublecircle];
 
-    // Edges point backwards (newer → older)
-    F -> D [color=blue, penwidth=2.0];
-    G -> E;
-    D -> B [color=blue, penwidth=2.0];
-    E -> C;
-    B -> A [color=blue, penwidth=2.0];
-    C -> A;
-
-    // Annotation
-    subgraph cluster_annotation {
-        style=invis;
-        NOTE [label="Chain: A → B → D → F\n\nD and F AGREE (share chain above A)\nD and E do NOT agree\nF and G do NOT agree", shape=box, style=filled, fillcolor=lightcyan, fontsize=9];
+    // Left side: chain CG → B → D → F → T1
+    subgraph cluster_left {
+        label="Left side";
+        labelloc=b;
+        style="dashed";
+        color=blue;
+        B [label="B", fillcolor=lightskyblue];
+        D [label="D", fillcolor=lightskyblue];
+        F [label="F", fillcolor=lightskyblue];
+        T1 [label="T1", fillcolor=lightskyblue];
+        L_PAD [shape=point, width=0, style=invis];
     }
+
+    // Right side: chain CG → C → E → G → T2
+    subgraph cluster_right {
+        label="Right side";
+        labelloc=b;
+        style="dashed";
+        color=orange;
+        C [label="C", fillcolor=lightyellow];
+        E [label="E", fillcolor=lightyellow];
+        G [label="G", fillcolor=lightyellow];
+        T2 [label="T2", fillcolor=lightyellow];
+        H [label="H", fillcolor=lightyellow];
+    }
+
+    // CG label node - kept very close to CG
+    CG_lbl [label="conflict genesis", shape=plaintext, style=filled, fillcolor=none, fontsize=10, fontcolor=gray40, width=0];
+
+    // Annotation at bottom
+    NOTE [label="Blue arrows = selected parent (chain-parent)\nDashed gray = non-selected parent\n\nChain-parent paths form a tree back to genesis:\nT1→F→D→B→CG (left side all agree)\nT2→G→E→C→CG (right side all agree)\nH→E→C→CG (H also agrees with right side)\n\nD and E do NOT agree (different chain above CG)", shape=box, style=filled, fillcolor=lightcyan, fontsize=9];
+
+    // Blue edges = selected parent (chain-parent path)
+    D -> B [color=blue, penwidth=2.0];
+    F -> D [color=blue, penwidth=2.0];
+    T1 -> F [color=blue, penwidth=2.0];
+    E -> C [color=blue, penwidth=2.0];
+    G -> E [color=blue, penwidth=2.0];
+    T2 -> G [color=blue, penwidth=2.0];
+    H -> E [color=blue, penwidth=2.0];
+
+    // Blue to CG (selected parent of B and C)
+    B -> CG [color=blue, penwidth=2.0];
+    C -> CG [color=blue, penwidth=2.0];
+
+    // Gray dashed = non-selected parent
+    T2 -> H [color=gray60, penwidth=1.0, style=dashed];
+    F -> C [color=gray60, penwidth=1.0, style=dashed];
+    E -> B [color=gray60, penwidth=1.0, style=dashed];
+
+    // Chain CG → label → NOTE at bottom
+    CG -> CG_lbl [style=invis];
+    CG_lbl -> NOTE [style=invis];
 }

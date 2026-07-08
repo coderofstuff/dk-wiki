@@ -1,14 +1,16 @@
 digraph k_cluster_comparison {
     rankdir=BT;
-    node [shape=circle, style=filled, fontsize=10];
+    nodesep=0.5;
+    ranksep=0.4;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.7, color=gray60];
 
     label="k-cluster comparison: k=0 (chain) vs k=2 (wider)";
-    labelloc=t;
 
     // Left side: k=0 chain — no concurrent blocks
     subgraph cluster_chain {
         label="k=0 cluster (chain)\nEvery block has 0 concurrent blocks within S";
+        labelloc=t;
         style=filled;
         fillcolor=aliceblue;
         C_GEN [label="genesis", fillcolor=orange];
@@ -25,6 +27,7 @@ digraph k_cluster_comparison {
     // Right side: k=2 wider structure — max 2 concurrent blocks
     subgraph cluster_wide {
         label="k=2 cluster (wider)\nMax 2 concurrent blocks within S (B,A at one level; C,D at another)";
+        labelloc=t;
         style=filled;
         fillcolor=honeydew;
         W_E [label="E", fillcolor=lightskyblue];
@@ -34,6 +37,9 @@ digraph k_cluster_comparison {
         W_A [label="A", fillcolor=lightskyblue];
         W_GEN [label="genesis", fillcolor=orange];
 
+        // Invisible dummy node on right to center the diamond layout
+        W_DUMMY [shape=point, width=0, style=invis];
+
         W_E -> W_C;
         W_E -> W_D;
         W_C -> W_B;
@@ -42,10 +48,13 @@ digraph k_cluster_comparison {
         W_D -> W_A;
         W_B -> W_GEN;
         W_A -> W_GEN;
+
+        // Connect dummy to rightmost nodes to balance layout
+        W_D -> W_DUMMY [style=invis];
+        W_A -> W_DUMMY [style=invis];
     }
 
     // Highlight concurrent pairs
-    C_B -> C_C [style=invis];
     W_B -> W_A [color=red, style=dashed, label="concurrent", fontsize=8];
     W_C -> W_D [color=red, style=dashed, label="concurrent", fontsize=8];
 }

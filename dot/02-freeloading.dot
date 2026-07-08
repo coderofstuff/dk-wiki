@@ -1,10 +1,11 @@
 digraph freeloading_attack {
     rankdir=TB;
-    node [shape=circle, style=filled, fontsize=9];
+    nodesep=0.5;
+    ranksep=0.4;
+    node [shape=circle, style=filled, fontsize=9, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
-    label="Freeloading attack on PHANTOM (k=5) — DAGKnight whitepaper example\nAttacker creates chain A1→A2→A3→A4→A5→A6 referencing H6.\nAt k=5, all attacker blocks fit in the 5-cluster (blue, dashed).\nHonest blocks H7–H11 are excluded (red) — the attack succeeds.\nWithout DAGKnight's adaptive rank, the attacker wins.";
-    labelloc=t;
+    label="Freeloading attack on PHANTOM (k=5) — DAGKnight whitepaper example\nAttacker creates chain A1→A2→A3→A4→A5→A6 referencing H6.\nAt k=5, all attacker blocks fit in the 5-cluster (blue, dashed).\nHonest blocks H7–H11 are excluded (red) — the attack succeeds.";
 
     GEN [label="H1\n(genesis)", fillcolor=orange, shape=doublecircle];
 
@@ -33,7 +34,20 @@ digraph freeloading_attack {
     H11 [label="H11", fillcolor=salmon];
 
     // Virtual block
-    V [label="V\n(virtual)", fillcolor=none, style="dashed", shape=circle];
+    V [label="V\n(virtual)", fillcolor=none, style="dashed", shape=circle, width=0.6, height=0.6];
+
+    // Force ranking
+    { rank=same; V; }
+    { rank=same; H11; A6; }
+    { rank=same; H10; }
+    { rank=same; H8; H9; }
+    { rank=same; H7; A5; }
+    { rank=same; H6; A4; }
+    { rank=same; H5; A3; }
+    { rank=same; H4; A2; }
+    { rank=same; H3; A1; }
+    { rank=same; H2; }
+    { rank=same; GEN; }
 
     // Edges point backwards (newer → older)
     V -> H11;
