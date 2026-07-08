@@ -1,0 +1,54 @@
+digraph conflict_zone_diamond {
+    rankdir=BT;
+    nodesep=0.5;
+    ranksep=0.4;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="Conflict Zone Diamond: future(CG) ∩ past(tips)";
+
+    // Blocks INSIDE the diamond (conflict zone)
+    F [label="F", fillcolor=lightskyblue];
+    G [label="G", fillcolor=lightyellow];
+    D [label="D", fillcolor=lightskyblue];
+    E [label="E", fillcolor=lightyellow];
+    H [label="H", fillcolor=lightgray];
+    C [label="C", fillcolor=orange, shape=doublecircle];
+
+    // Blocks OUTSIDE the diamond
+    OUTSIDE1 [label="X1", fillcolor=lightgray];
+    OUTSIDE2 [label="X2", fillcolor=lightgray];
+    OUTSIDE3 [label="X3", fillcolor=lightgray];
+    OUTSIDE4 [label="X4", fillcolor=lightgray];
+
+    // Edges inside the diamond
+    F -> D;
+    G -> E;
+    D -> C;
+    E -> C;
+    D -> H;
+    E -> H;
+    H -> C;
+
+    // Edges crossing the diamond boundary (dashed to show they're ignored)
+    OUTSIDE1 -> F [style=dashed, color=red];
+    OUTSIDE2 -> G [style=dashed, color=red];
+    F -> OUTSIDE3 [style=dashed, color=red];
+    G -> OUTSIDE4 [style=dashed, color=red];
+
+    // Force ranking so layout is correct
+    { rank=same; OUTSIDE1; OUTSIDE2; }
+    { rank=same; F; G; }
+    { rank=same; D; E; H; }
+    { rank=same; C; }
+    { rank=same; OUTSIDE3; OUTSIDE4; }
+
+    // The conflict zone cluster
+    subgraph cluster_diamond {
+        label="CONFLICT ZONE (diamond)\nfuture(CG) ∩ past(tips)\nOnly these blocks are colored and voted";
+        labelloc=t;
+        style=filled;
+        fillcolor=moccasin;
+        F; G; D; E; H; C;
+    }
+}

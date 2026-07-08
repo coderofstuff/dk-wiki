@@ -1,18 +1,19 @@
 digraph free_vs_committed {
     rankdir=RL;
-    node [shape=circle, style=filled, fontsize=10];
+    nodesep=0.5;
+    ranksep=0.4;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
     label="Free Search vs Committed Search";
-    labelloc=t;
 
-    V [label="Virtual", fillcolor=lightyellow, shape=box];
+    V [label="Virtual", fillcolor=lightyellow, shape=box, width=1.0, height=0.5];
 
     B [label="B", fillcolor=lightskyblue];
     C [label="C", fillcolor=lightyellow];
     D [label="D", fillcolor=lightskyblue];
     E [label="E", fillcolor=lightyellow];
-    F [label="F\n(CG)", fillcolor=orange, shape=doublecircle];
+    F [label="F", fillcolor=orange, shape=doublecircle, xlabel="conflict genesis"];
 
     // Edges point backwards (newer → older)
     V -> B;

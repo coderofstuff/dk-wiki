@@ -1,16 +1,17 @@
 digraph conflict_zone {
     rankdir=BT;
-    node [shape=circle, style=filled, fontsize=10];
+    nodesep=0.5;
+    ranksep=0.4;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
     label="Conflict Zone: future(CG) ∩ past(tips)\nThis is the only region DAGKnight needs to analyze";
-    labelloc=t;
 
-    F [label="F\n(tip)", fillcolor=lightskyblue];
-    G [label="G\n(tip)", fillcolor=lightyellow];
+    F [label="F", fillcolor=lightskyblue, xlabel="tips"];
+    G [label="G", fillcolor=lightyellow];
     D [label="D", fillcolor=lightskyblue];
     E [label="E", fillcolor=lightyellow];
-    C [label="C\n(conflict genesis)", fillcolor=orange, shape=doublecircle];
+    C [label="C", fillcolor=orange, shape=doublecircle, xlabel="conflict genesis"];
     B [label="B", fillcolor=lightgray];
     GEN [label="genesis", fillcolor=lightgray];
 
@@ -22,19 +23,28 @@ digraph conflict_zone {
     C -> B;
     B -> GEN;
 
+    // Force ranking
+    { rank=same; F; G; }
+    { rank=same; D; E; }
+    { rank=same; C; }
+    { rank=same; B; }
+    { rank=same; GEN; }
+
     // Conflict zone: between CG and tips (this is what DAGKnight analyzes)
     subgraph cluster_zone {
         label="Conflict Zone\nfuture(CG) ∩ past(tips)\nDAGKnight analyzes this region";
+        labelloc=t;
         style=filled;
         fillcolor=moccasin;
-        D; E; F; G; C;
+        F; G; D; E; C;
     }
 
     // Resolved: below CG (already settled, no re-analysis needed)
     subgraph cluster_resolved {
         label="Already Resolved\nbelow conflict genesis\norder is stable";
+        labelloc=b;
         style=filled;
         fillcolor=lightgray;
-        GEN; B;
+        B; GEN;
     }
 }

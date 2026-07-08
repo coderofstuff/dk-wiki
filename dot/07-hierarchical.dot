@@ -1,18 +1,19 @@
 digraph hierarchical_conflict {
     rankdir=RL;
-    node [shape=circle, style=filled, fontsize=10];
+    nodesep=0.5;
+    ranksep=0.4;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
     label="Hierarchical Conflict Resolution: conflicts resolved oldest → newest";
-    labelloc=t;
 
     GEN [label="genesis", fillcolor=lightgray];
     B [label="B", fillcolor=lightgray];
-    CG [label="C\n(conflict genesis)", fillcolor=orange, shape=doublecircle];
+    CG [label="C", fillcolor=orange, shape=doublecircle, xlabel="conflict genesis"];
     D [label="D", fillcolor=lightskyblue];
     E [label="E", fillcolor=lightyellow];
-    F [label="F\n(winner)", fillcolor=lightskyblue];
-    G [label="G\n(loser)", fillcolor=salmon];
+    F [label="F", fillcolor=lightskyblue, xlabel="winner"];
+    G [label="G", fillcolor=salmon, xlabel="loser"];
 
     // Edges point backwards (newer → older)
     F -> D [color=blue, penwidth=2.0];
@@ -25,6 +26,7 @@ digraph hierarchical_conflict {
     // Conflict zone: between CG and tips
     subgraph cluster_zone {
         label="Conflict Zone\nDAGKnight analyzes here";
+        labelloc=t;
         style=filled;
         fillcolor=moccasin;
         D; E; F; G; CG;
@@ -33,6 +35,7 @@ digraph hierarchical_conflict {
     // Resolved: below CG
     subgraph cluster_resolved {
         label="Already Resolved\nstable, no re-analysis";
+        labelloc=t;
         style=filled;
         fillcolor=lightgray;
         GEN; B;

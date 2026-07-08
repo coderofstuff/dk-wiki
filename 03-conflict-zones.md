@@ -2,7 +2,7 @@
 
 ## The Chain-Parent
 
-In a DAG, blocks have multiple parents. DAGKnight introduces the concept of a **chain-parent** — a single designated parent per block that forms a "main chain" through the DAG.
+In a DAG, blocks have multiple parents. Similar to GhostDAG, DAGKnight uses the concept of a **chain-parent** (also known as the **selected parent**) — a single designated parent per block that forms a "main chain" through the DAG from the POV of this block.
 
 ### Definition
 
@@ -71,6 +71,17 @@ The **conflict zone** is the region of the DAG between the conflict genesis and 
 ```
 conflict_zone = future(conflict_genesis) ∩ past(tips)
 ```
+
+### The Diamond Shape
+
+The conflict zone forms a **diamond** shape in the DAG. It's the set of blocks that are both in the future of the conflict genesis AND in the past of all current tips.
+
+![Conflict zone diamond](png/03-conflict-zone-diamond.png)
+
+Some blocks may have parents or children that are outside this diamond from the POV of the entire DAG. But for the purposes of coloring and voting, those outside blocks are **ignored** entirely — only blocks inside the diamond participate in k-colouring and UMC voting.
+
+- **Inside the diamond**: Colored (blue/red/gray) and participate in UMC voting
+- **Outside the diamond**: Ignored for this conflict zone's analysis
 
 The conflict zone is where DAGKnight performs its analysis (k-colouring, UMC voting, etc.). Everything below the conflict genesis is already resolved; everything above the tips hasn't happened yet.
 

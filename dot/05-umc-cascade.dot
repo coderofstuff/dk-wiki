@@ -1,18 +1,19 @@
 digraph umc_cascade_example {
     rankdir=RL;
-    node [shape=circle, style=filled, fontsize=9];
+    nodesep=0.5;
+    ranksep=0.4;
+    node [shape=circle, style=filled, fontsize=9, width=0.6, height=0.6];
     edge [arrowsize=0.5, color=gray60];
 
     label="UMC Cascade Voting: votes flow from future → past";
-    labelloc=t;
 
-    GEN [label="genesis\nvote = +1", fillcolor=lightskyblue, shape=doublecircle];
-    B [label="B\nvote = +1", fillcolor=lightskyblue];
-    C [label="C\nvote = +1", fillcolor=lightskyblue];
-    D [label="D\n(red)", fillcolor=salmon];
-    E [label="E\nvote = +1", fillcolor=lightskyblue];
-    F [label="F\n(red)", fillcolor=salmon];
-    G [label="G\nvote = +1", fillcolor=lightskyblue];
+    GEN [label="genesis", fillcolor=lightskyblue, shape=doublecircle, xlabel="+1"];
+    B [label="B", fillcolor=lightskyblue, xlabel="+1"];
+    C [label="C", fillcolor=lightskyblue, xlabel="+1"];
+    D [label="D", fillcolor=salmon, xlabel="red"];
+    E [label="E", fillcolor=lightskyblue, xlabel="+1"];
+    F [label="F", fillcolor=salmon, xlabel="red"];
+    G [label="G", fillcolor=lightskyblue, xlabel="+1"];
 
     // Edges point backwards (newer → older)
     G -> E;
@@ -25,6 +26,6 @@ digraph umc_cascade_example {
 
     subgraph cluster_votes {
         style=invis;
-        VOTES [label="Vote computation (future → past):\n\nG:    blues=0, reds=0  → +1\nE:    blues=1(G), reds=0 → +1\nF:    red → doesn't vote\nC:    blues=1(E), reds=0 → +1\nD:    red → doesn't vote\nB:    blues=3(C,E,G), reds=2(D,F)\n      3-2+e ≥ 0 → +1\ngenesis: blues=4(B,C,E,G), reds=2(D,F)\n      4-2+e ≥ 0 → +1\n\nResult: genesis votes +1 → UMC passes", shape=box, style=filled, fillcolor=lightcyan, fontsize=8];
+        VOTES [label="Vote computation (future → past):\n\nG:    blues=0, reds=0  → +1\nE:    blues=1(G), reds=0 → +1\nF:    red → doesn't vote\nC:    blues=2(E,G), reds=0 → +1\nD:    red → doesn't vote\nB:    blues=3(C,E,G), reds=2(D,F)\n      3-2+e ≥ 0 → +1\ngenesis: blues=4(B,C,E,G), reds=2(D,F)\n      4-2+e ≥ 0 → +1\n\nResult: genesis votes +1 → UMC passes", shape=box, style=filled, fillcolor=lightcyan, fontsize=8];
     }
 }

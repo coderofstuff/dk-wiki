@@ -1,21 +1,23 @@
 digraph tie_breaking_example {
     rankdir=RL;
-    node [shape=circle, style=filled, fontsize=9];
+    nodesep=0.5;
+    ranksep=0.4;
+    node [shape=circle, style=filled, fontsize=9, width=0.6, height=0.6];
     edge [arrowsize=0.5, color=gray60];
 
     label="Tie-Breaking: subgroup with earliest latest-witness wins";
-    labelloc=t;
 
     GEN [label="genesis", fillcolor=orange];
     A [label="A", fillcolor=lightskyblue];
-    B [label="B\n(witness)", fillcolor=lightskyblue, shape=doublecircle];
-    C [label="C\n(witness)", fillcolor=lightskyblue, shape=doublecircle];
-    D [label="D\n(witness)", fillcolor=lightskyblue, shape=doublecircle];
+    B [label="B", fillcolor=lightskyblue, shape=doublecircle, xlabel="witness"];
+    C [label="C", fillcolor=lightskyblue, shape=doublecircle, xlabel="witness"];
+    D [label="D", fillcolor=lightskyblue, shape=doublecircle, xlabel="witness"];
     E [label="E", fillcolor=lightskyblue];
 
-    // Reference cluster F structure (free search at g(k))
+    // Reference cluster
     subgraph cluster_f {
         label="Reference Cluster F (free search at g(k))\nF = {genesis, A, B, C, D, E}";
+        labelloc=t;
         style=filled;
         fillcolor=aliceblue;
 
@@ -26,21 +28,8 @@ digraph tie_breaking_example {
         E -> C;
     }
 
-    // Show the two conditioned chains and their witnesses
-    subgraph cluster_chain1 {
-        label="Subgroup 1: conditioned chain = {genesis, A, D}\nWitnesses C₁ = {B, C}\nmax(C₁) = C, blue_work = 100";
-        style=filled;
-        fillcolor=honeydew;
-    }
-
-    subgraph cluster_chain2 {
-        label="Subgroup 2: conditioned chain = {genesis, A, E}\nWitnesses C₂ = {B, C, D}\nmax(C₂) = D, blue_work = 150";
-        style=filled;
-        fillcolor=mistyrose;
-    }
-
     subgraph cluster_result {
         style=invis;
-        WINNER [label="Winner: Subgroup 1\nblue_work(max(C₁)) = 100 < 150\nSubgroup 2 used excessive rank later,\nso Subgroup 1 wins", shape=box, style=filled, fillcolor=lightgreen, fontsize=9];
+        WINNER [label="Subgroup 1: conditioned chain = {genesis, A, D}\nWitnesses C₁ = {B, C}\nmax(C₁) = C, blue_work = 100\n\nSubgroup 2: conditioned chain = {genesis, A, E}\nWitnesses C₂ = {B, C, D}\nmax(C₂) = D, blue_work = 150\n\nWinner: Subgroup 1 (lower blue_work of latest witness)", shape=box, style=filled, fillcolor=lightgreen, fontsize=9];
     }
 }

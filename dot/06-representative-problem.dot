@@ -1,18 +1,19 @@
 digraph representative_problem {
     rankdir=RL;
-    node [shape=circle, style=filled, fontsize=10];
+    nodesep=0.5;
+    ranksep=0.4;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
     label="Attacker blocks that agree with honest subgroup but are red\nWithout gray-blocks, T1,T2 cast negative votes and hurt the honest subgroup";
-    labelloc=t;
 
-    H [label="H\n(blue)", fillcolor=lightskyblue];
-    E [label="E\n(blue)", fillcolor=lightskyblue];
-    B [label="B\n(blue)", fillcolor=lightskyblue];
-    C [label="C\n(blue)", fillcolor=lightskyblue];
-    A [label="A\n(blue)", fillcolor=lightskyblue];
-    T1 [label="T1\n(red, agrees)", fillcolor=salmon, style="filled,dashed"];
-    T2 [label="T2\n(red, agrees)", fillcolor=salmon, style="filled,dashed"];
+    H [label="H", fillcolor=lightskyblue];
+    E [label="E", fillcolor=lightskyblue];
+    B [label="B", fillcolor=lightskyblue];
+    C [label="C", fillcolor=lightskyblue];
+    A [label="A", fillcolor=lightskyblue];
+    T1 [label="T1", fillcolor=salmon, style="filled,dashed", xlabel="red, agrees"];
+    T2 [label="T2", fillcolor=salmon, style="filled,dashed", xlabel="red, agrees"];
     CG [label="CG", fillcolor=orange, shape=doublecircle];
 
     // Edges point backwards (newer → older)
@@ -28,8 +29,8 @@ digraph representative_problem {
 
     subgraph cluster_legend {
         style=invis;
-        L_BLUE [label="Blue (honest cluster)", fillcolor=lightskyblue, shape=box, style=filled];
-        L_RED [label="Red (attacker, agrees with honest)\n→ neutralized as gray", fillcolor=salmon, shape=box, style="filled,dashed"];
-        L_CG [label="Conflict Genesis", fillcolor=orange, shape=box, style=filled];
+        L_BLUE [label="Blue (honest cluster)", fillcolor=lightskyblue, shape=box, style=filled, fontsize=9];
+        L_RED [label="Red (attacker, agrees with honest)\n→ neutralized as gray", fillcolor=salmon, shape=box, style="filled,dashed", fontsize=9];
+        L_CG [label="Conflict Genesis", fillcolor=orange, shape=box, style=filled, fontsize=9];
     }
 }

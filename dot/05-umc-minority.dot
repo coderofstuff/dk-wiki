@@ -1,17 +1,18 @@
 digraph umc_minority_fail {
     rankdir=RL;
-    node [shape=circle, style=filled, fontsize=9];
+    nodesep=0.5;
+    ranksep=0.4;
+    node [shape=circle, style=filled, fontsize=9, width=0.6, height=0.6];
     edge [arrowsize=0.5, color=gray60];
 
     label="UMC Voting: Minority Blues → FAIL";
-    labelloc=t;
 
-    GEN [label="1\n(blue)", fillcolor=lightskyblue, shape=doublecircle];
-    B2 [label="2\n(blue)", fillcolor=lightskyblue];
-    B3 [label="3\n(red)", fillcolor=salmon];
-    B4 [label="4\n(blue)", fillcolor=lightskyblue];
-    B5 [label="5\n(red)", fillcolor=salmon];
-    B6 [label="6\n(red)", fillcolor=salmon];
+    GEN [label="1", fillcolor=lightskyblue, shape=doublecircle, xlabel="blue"];
+    B2 [label="2", fillcolor=lightskyblue, xlabel="blue"];
+    B3 [label="3", fillcolor=salmon, xlabel="red"];
+    B4 [label="4", fillcolor=lightskyblue, xlabel="blue"];
+    B5 [label="5", fillcolor=salmon, xlabel="red"];
+    B6 [label="6", fillcolor=salmon, xlabel="red"];
 
     // Edges point backwards (newer → older)
     B6 -> B4;
