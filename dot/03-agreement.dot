@@ -21,7 +21,7 @@ digraph agreement_example {
         T1 [label="T1", fillcolor=lightskyblue];
     }
 
-    // Right side: chain CG → C → E → G → T2
+     // Right side: chain CG → C → E → G → T2 (with T3 branching off H)
     subgraph cluster_right {
         label="Right side";
         labelloc=b;
@@ -32,13 +32,14 @@ digraph agreement_example {
         G [label="G", fillcolor=lightyellow];
         T2 [label="T2", fillcolor=lightyellow];
         H [label="H", fillcolor=lightyellow];
+        T3 [label="T3", fillcolor=lightyellow];
     }
 
     // CG label node
     CG_lbl [label="conflict genesis", shape=plaintext, style=filled, fillcolor=none, fontsize=10, fontcolor=gray40, width=0];
 
     // Annotation at bottom
-    NOTE [label="Blue arrows = selected parent (chain-parent)\nDashed gray = non-selected parent\n\nChain-parent paths form a tree back to genesis:\nT1→F→D→B→CG (left side all agree)\nT2→G→E→C→CG (right side all agree)\nH→E→C→CG (H also agrees with right side)\n\nD and E do NOT agree (different chain above CG)", shape=box, style=filled, fillcolor=lightcyan, fontsize=9, width=7];
+    NOTE [label="Blue arrows = selected parent (chain-parent)\nDashed gray = non-selected parent\n\nChain-parent paths form a tree back to genesis:\nT1→F→D→B→CG (left side all agree)\nT2→G→E→C→CG (right side all agree)\nT3→H→E→C→CG (T3 also agrees with right side)\n\nD and E do NOT agree (different chain above CG)", shape=box, style=filled, fillcolor=lightcyan, fontsize=9, width=7];
 
     // Blue edges = selected parent (chain-parent path)
     D -> B [color=blue, penwidth=2.0];
@@ -48,6 +49,7 @@ digraph agreement_example {
     G -> E [color=blue, penwidth=2.0];
     T2 -> G [color=blue, penwidth=2.0];
     H -> E [color=blue, penwidth=2.0];
+    T3 -> H [color=blue, penwidth=2.0];
 
     // Blue to CG (selected parent of B and C)
     B -> CG [color=blue, penwidth=2.0];

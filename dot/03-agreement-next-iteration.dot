@@ -1,0 +1,82 @@
+digraph agreement_example {
+    rankdir=BT;
+    nodesep=0.8;
+    ranksep=0.1;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="Next hierarchical iteration: E is the new conflict genesis\nT2 and T3 are the new tips";
+
+    CG [label="CG", fillcolor=lightgray, shape=doublecircle];
+
+    // Left side: EXACT SAME as original
+    subgraph cluster_left {
+        label="";
+        labelloc=b;
+        style="dashed";
+        color=gray;
+        B [label="B", fillcolor=lightgray];
+        D [label="D", fillcolor=lightgray];
+        F [label="F", fillcolor=lightgray];
+        T1 [label="T1", fillcolor=lightgray];
+    }
+
+     // Right side: EXACT SAME as original
+    subgraph cluster_right {
+        label="";
+        labelloc=b;
+        style="dashed";
+        color=gray;
+        C [label="C", fillcolor=lightgray];
+        E [label="E", fillcolor=orange, shape=doublecircle];
+        subgraph cluster_right_left {
+            label="Left side";
+            labelloc=b;
+            style="dashed";
+            color=blue
+            G [label="G", fillcolor=lightskyblue];
+            T2 [label="T2", fillcolor=lightskyblue];
+        }
+
+        subgraph cluster_right_right {
+            label="Right side";
+            labelloc=b;
+            style="dashed";
+            color=orange
+            H [label="H", fillcolor=lightyellow];
+            T3 [label="T3", fillcolor=lightyellow];
+        }
+    }
+
+    // E label node
+    E_lbl [label="new conflict genesis", shape=plaintext, style=filled, fillcolor=none, fontsize=10, fontcolor=gray40, width=0];
+
+    // Annotation at bottom
+    NOTE [label="Old conflict zone (CG→E) is resolved — blocks grayed out\nNew conflict zone: E→{T2,T3}\n\nT2→G→E (left side)\nT3→H→E (right side)\n\nG and H do NOT agree (different chain above E)", shape=box, style=filled, fillcolor=lightcyan, fontsize=9, width=7];
+
+    // Blue edges = selected parent (chain-parent path)
+    D -> B [color=gray60, penwidth=2.0];
+    F -> D [color=gray60, penwidth=2.0];
+    T1 -> F [color=gray60, penwidth=2.0];
+    E -> C [color=gray60, penwidth=2.0];
+    G -> E [color=blue, penwidth=2.0];
+    T2 -> G [color=blue, penwidth=2.0];
+    H -> E [color=blue, penwidth=2.0];
+    T3 -> H [color=blue, penwidth=2.0];
+
+    // Blue to CG (selected parent of B and C)
+    B -> CG [color=gray60, penwidth=2.0];
+    C -> CG [color=gray60, penwidth=2.0];
+
+    // Gray dashed = non-selected parent
+    T2 -> H [color=gray60, penwidth=1.0, style=dashed];
+    F -> C [color=gray60, penwidth=1.0, style=dashed];
+    E -> B [color=gray60, penwidth=1.0, style=dashed];
+
+    // E label close to E
+    E -> E_lbl [style=invis, constraint=false];
+
+    // Bottom chain from CG
+    CG -> E_lbl [style=invis];
+    E_lbl -> NOTE [style=invis];
+}
