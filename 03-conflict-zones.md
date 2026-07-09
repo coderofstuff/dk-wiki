@@ -48,9 +48,17 @@ Two blocks "agree" when they share a common chain-extension above the conflict p
 
 ![Agreement visualization](png/03-agreement.png)
 
-- D and F **agree** (they share chain path through B, A)
-- D and E do **not** agree (no common chain ancestor above A)
-- F and G do **not** agree (no common chain ancestor above A)
+Three tips compete: **T1** (left side, blue) and **T2, T3** (right side, yellow/orange).
+
+Agreement chains (blue arrows = selected parent):
+- **Left side**: T1 → F → D → B → CG — all agree
+- **Right side**: T2 → G → E → C → CG and T3 → H → E → C → CG — all agree
+
+- T1 and T2 do **not** agree (different chain above CG: B vs C)
+- T2 and T3 **do** agree (same chain above CG through E → C → CG)
+- D and E do **not** agree (different chain above CG)
+
+Dashed gray edges show non-selected parents (e.g., F also references C, but did not select it).
 
 ### Why Agreement Matters
 

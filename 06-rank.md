@@ -192,6 +192,17 @@ DAGKnight is designed so that rank is **stable** for settled parts of the DAG:
 
 This stability is what allows DAGKnight to achieve convergence.
 
+### Rank Is Adaptive
+
+The core property of rank is that it is **adaptive to the actual latency observed in the DAG**. By evaluating from the conflict genesis upward, DAGKnight judges only the recent topology that matters for the current conflict. It does not drag old history into the decision.
+
+This means:
+- If the network is fast now (low latency), rank will be low — confirming quickly
+- If an attack created artificial splits (high concurrency), rank will be high — slowing confirmation as a defensive measure
+- Once the attack ends, rank naturally drops — the network recovers without manual intervention
+
+This adaptiveness is what distinguishes DAGKnight from protocols that rely on a fixed, globally-configured k parameter.
+
 ## Summary
 
 | Concept | Definition |

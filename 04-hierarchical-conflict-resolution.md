@@ -75,11 +75,19 @@ This recursion bottoms out at genesis, which has no parents and returns immediat
 
 The **latest common chain ancestor (LCCA)** of all candidates is the conflict genesis. This is the most recent block where all candidates still "agreed."
 
-![Hierarchical conflict resolution](png/04-hierarchical.png)
+The first iteration of hierarchical conflict resolution looks exactly like the agreement diagram from Chapter 03:
 
-### Step 3: Partition into Subgroups
+![Iteration 1: Three tips, two subgroups](png/03-agreement.png)
 
-Split candidates into **agreement subgroups** based on their next chain ancestor above the conflict genesis:
+Here we have 3 tips: **T1** (left side) and **T2, T3** (right side). The conflict genesis is **CG**. The two subgroups are:
+- **Left subgroup** (blue): {T1, F, D, B} — chain path T1 → F → D → B → CG
+- **Right subgroup** (yellow/orange): {T2, T3, G, H, E, C} — chain paths T2 → G → E → C → CG and T3 → H → E → C → CG
+
+DAGKnight calculates the rank of each subgroup. Suppose the left subgroup has rank 2 and the right subgroup has rank 5. The left subgroup wins (lower rank), and the right subgroup is eliminated.
+
+### How Subgroups Form
+
+Subgroups are formed by walking each tip's chain-parent path backward toward the conflict genesis, and grouping tips that share the same block just above the conflict genesis:
 
 ```python
 def next_chain_ancestor(block, conflict_genesis):
@@ -92,9 +100,13 @@ def next_chain_ancestor(block, conflict_genesis):
         current = parent
 ```
 
-Blocks with the same next chain ancestor form a subgroup. Each subgroup represents a "side" in the conflict.
+Tips with the same next chain ancestor form a subgroup. In the diagram above:
+- T1's next chain ancestor above CG is B → **Left subgroup**
+- T2's and T3's next chain ancestor above CG is C → **Right subgroup**
 
-### Step 4: Rank Each Subgroup
+Not every chain extension above CG forms a subgroup. Only a chain extension that is **reachable from at least one tip** via chain ancestry counts. If CG has a child X that no tip chains through, X does not form a group — the perception (agreement) must propagate from the tips downward. The number of groups is bounded by the number of CG's children, but could be fewer if some branches are not reachable from any tip.
+
+### Step 3: Rank Each Subgroup
 
 For each subgroup, calculate its rank using the algorithm from Chapter 06:
 
@@ -102,27 +114,61 @@ For each subgroup, calculate its rank using the algorithm from Chapter 06:
 rank_i = Calculate-Rank(subgroup_i, future(conflict_genesis))
 ```
 
-### Step 5: Eliminate Losers
+### Step 4: Eliminate Losers
 
 Subgroups with higher rank are eliminated. Only the subgroup(s) with the minimum rank survive.
 
-### Step 6: Tie-Breaking (if needed)
+### Step 5: Tie-Breaking (if needed)
 
 If multiple subgroups share the minimum rank, the tie-breaking algorithm (Chapter 07) selects the winner.
 
-### Step 7: Iterate
+### Step 6: Iterate — Narrow to the Winning Subgroup
 
-If there are still multiple candidates within the winning subgroup, go back to Step 2 and find the next conflict. This is the **hierarchical** aspect — conflicts are resolved from oldest to newest.
+If the winning subgroup still has multiple tips, go back to Step 2 with the winning subgroup's blocks as the new candidate set. This is the **hierarchical** aspect — conflicts are resolved from oldest to newest.
+
+In our example, the left subgroup has only one tip (T1), so the algorithm terminates. But imagine the **right subgroup** had won instead. With two tips (T2 and T3), the algorithm continues:
+
+![Iteration 2: Narrowed conflict zone](png/03-agreement-next-iteration.png)
+
+Notice what changed:
+- The old conflict zone (CG → tips) is **grayed out** — already resolved
+- A **new conflict genesis** emerges: **E** (the latest common chain ancestor of T2 and T3)
+- The conflict zone has narrowed to the region between E and {T2, T3}
+- Two new subgroups form within the old right side:
+  - **Left side** (blue): T2 → G → E
+  - **Right side** (yellow/orange): T3 → H → E
+
+This narrowing process repeats until a single tip remains. That tip becomes the **selected tip**.
 
 ## Why Hierarchical?
 
 The while loop creates a **conflict hierarchy** — conflicts are resolved from oldest to newest, with each level narrowing the candidate set.
 
-This hierarchical approach has two benefits:
+### Why Explicit Conflict Resolution?
+
+DAGKnight could not simply "pick the tip with the most blue work" like some protocols do. Instead, it must work with the topology it can see. Tips disagree on their view of the DAG — each tip represents a different perception of what the network looks like. To compare competing perceptions, DAGKnight must first find where they last agreed (the conflict genesis), then evaluate which side built a better-connected network above that point.
+
+The side with the lower rank is the side that achieved better connectivity within the conflict zone. Lower rank means the network was more tightly connected during that period — which is exactly what you want to reward.
+
+### Why Not Evaluate from Genesis?
+
+The core of DAGKnight is being **adaptive to actual latency observed in the DAG**. By evaluating from the conflict genesis upward — rather than from genesis to tips — DAGKnight judges only the recent latency conditions that matter for the current conflict. It does not drag very old history into the decision.
+
+### A General Structure
+
+Hierarchical conflict resolution is a general framework, not specific to DAGKnight:
+- **Nakamoto consensus** (longest chain) uses it implicitly when choosing among competing forks
+- **Phantom** uses it with hash-power-based tie-breaking
+- **HashGuard** uses it with hash-based tip selection
+- **DAGKnight** uses it with rank-based evaluation
+
+What makes DAGKnight unique is not the hierarchy itself, but what it uses to judge subgroups: the rank, which measures the actual connectivity observed in the DAG.
+
+### Two Benefits of Hierarchy
 
 1. **Early-to-recent ordering**: Oldest conflicts are resolved first, providing stability for settled parts of the DAG.
 
-2. **Adaptiveness**: Each level of conflict can have a different rank. If the network was slow in the past (high rank) but is fast now (low rank), the hierarchy naturally adapts.
+2. **Adaptiveness**: Each level of conflict can have a different rank. If the network was slow in the past (high rank) but is fast now (low rank), the hierarchy naturally adapts — because each level evaluates only the topology above its own conflict genesis, not the entire history.
 
 ## The Return Value
 

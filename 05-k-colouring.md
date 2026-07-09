@@ -155,4 +155,27 @@ Where K is the k parameter (bounds the anticone width).
 | **Free Search** | Explores all parents (unbiased) |
 | **Committed** | Only explores agreeing parents (biased to one side) |
 
+## DAGKnight's Coloring vs Global Coloring
+
+K-Colouring in DAGKnight serves a specific purpose: **resolving conflicts within a conflict zone**. It tells you which blocks are better connected within that zone. It does not evaluate blocks globally — a block that is blue in one conflict zone might be red in another.
+
+Outside of conflict resolution, DAGKnight still needs a global coloring to:
+- Calculate blue work for DAA (Difficulty Adjustment Algorithm)
+- Determine subsidy coinbase rewards
+- Provide pruning guarantees
+
+Because DAGKnight's k is local to each conflict zone (and can vary), it cannot serve as a global coloring. The protocol currently runs GhostDAG alongside DAGKnight to provide global blue/red classification for these purposes. This is an implementation detail that may evolve as the protocol matures.
+
+## Summary
+
+| Concept | Definition |
+|---------|------------|
+| **K-Colouring** | Greedy algorithm to build a k-cluster from past to future |
+| **Blue** | Block included in the cluster |
+| **Red** | Block excluded from the cluster |
+| **Chain** | Backbone of selected parents through the cluster |
+| **Mergeset** | Blocks added at each chain step (not on the chain path) |
+| **Free Search** | Explores all parents (unbiased) |
+| **Committed** | Only explores agreeing parents (biased to one side) |
+
 K-Colouring is the workhorse of DAGKnight. It's called repeatedly during rank calculation (with increasing k) and during tie-breaking (with different k values). Understanding its two modes (free vs committed) is essential for the algorithms that follow.
