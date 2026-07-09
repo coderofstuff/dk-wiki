@@ -1,4 +1,4 @@
-# 04 — K-Colouring
+# 05 — K-Colouring
 
 ## The Problem
 
@@ -93,7 +93,7 @@ These added blocks form the **mergeset**.
 
 ### Example
 
-![Free search vs committed search](png/04-free-vs-committed.png)
+![Free search vs committed search](png/05-free-vs-committed.png)
 
 **Committed** (free_search=false): Only follows agreeing parents. If evaluating subgroup {C}, the chain follows F → E → C → Virtual. Blocks B and D are not explored.
 

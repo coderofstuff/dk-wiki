@@ -17,11 +17,11 @@ DAGKnight is a **parameterless** DAG-based consensus protocol that:
 | [01 — DAG Basics](01-dag-basics.md) | Past, future, anticone, tips, virtual block, genesis | None |
 | [02 — k-Clusters](02-k-clusters.md) | k-cluster definition, PHANTOM, why parameterization is limiting | Chapter 01 |
 | [03 — Conflict Zones](03-conflict-zones.md) | Chain-parent, agreement, conflict genesis, gray blocks | Chapter 01 |
-| [04 — K-Colouring](04-k-colouring.md) | The k-colouring algorithm, free search vs committed | Chapters 01, 03 |
-| [05 — UMC Voting](05-umc-voting.md) | Uniform Majority Coverage, cascade voting, why it needs to be incremental | Chapters 01, 04 |
-| [06 — Rank](06-rank.md) | Rank calculation, representatives, the min-k search | Chapters 04, 05 |
-| [07 — Hierarchical Conflict Resolution](07-hierarchical-conflict-resolution.md) | The main ordering algorithm, iterative conflict resolution | Chapters 03, 06 |
-| [08 — Tie-Breaking](08-tie-breaking.md) | Algorithm 4, high-rank witnesses, recovery from rank inflation | Chapters 04, 07 |
+| [04 — Hierarchical Conflict Resolution](04-hierarchical-conflict-resolution.md) | The main ordering algorithm, iterative conflict resolution | Chapters 03, 06, 07 |
+| [05 — K-Colouring](05-k-colouring.md) | The k-colouring algorithm, free search vs committed | Chapters 01, 03 |
+| [06 — Rank](06-rank.md) | Rank calculation, representatives, the min-k search | Chapters 05 |
+| [07 — Tie-Breaking](07-tie-breaking.md) | Algorithm 4, high-rank witnesses, recovery from rank inflation | Chapters 05, 06 |
+| [08 — UMC Voting](08-umc-voting.md) | Uniform Majority Coverage, cascade voting, incremental approach | Chapters 05, 06 |
 
 ## How to Read This Wiki
 

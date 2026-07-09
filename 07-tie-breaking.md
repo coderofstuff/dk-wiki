@@ -1,4 +1,4 @@
-# 08 — Tie-Breaking
+# 07 — Tie-Breaking
 
 ## When Tie-Breaking Is Needed
 
@@ -131,11 +131,11 @@ In other words, we penalize the side that is **still** using excessive rank, for
 
 ### Tie-Breaking Flow
 
-![Tie-breaking algorithm flow](png/08-tie-breaking-flow.png)
+![Tie-breaking algorithm flow](png/07-tie-breaking-flow.png)
 
 ### Visual Example
 
-![Tie-breaking: high-rank witnesses](png/08-tie-breaking-example.png)
+![Tie-breaking: high-rank witnesses](png/07-tie-breaking-example.png)
 
 Reference cluster F (free search at g(k)): {genesis, A, B, C, D, E}
 

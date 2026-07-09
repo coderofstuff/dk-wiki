@@ -1,4 +1,4 @@
-# 05 — UMC Voting
+# 08 — UMC Voting
 
 ## The Problem
 
@@ -96,7 +96,7 @@ function UMC-Voting(G, U, e):
 
 #### Example
 
-![UMC cascade voting example](png/05-umc-cascade.png)
+![UMC cascade voting example](png/08-umc-cascade.png)
 
 Blues: {genesis, B, C, E, G} | Reds: {D, F}
 
@@ -116,7 +116,7 @@ Genesis's vote = +1, so UMC passes.
 
 #### Counter-example: Minority Blues Fail
 
-![UMC voting: minority blues fail](png/05-umc-minority.png)
+![UMC voting: minority blues fail](png/08-umc-minority.png)
 
 When blues are a minority, the cascade produces a negative vote at genesis and UMC fails.
 

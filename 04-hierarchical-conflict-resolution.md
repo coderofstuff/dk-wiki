@@ -1,4 +1,4 @@
-# 07 — Hierarchical Conflict Resolution
+# 04 — Hierarchical Conflict Resolution
 
 ## The Main Algorithm
 
@@ -75,7 +75,7 @@ This recursion bottoms out at genesis, which has no parents and returns immediat
 
 The **latest common chain ancestor (LCCA)** of all candidates is the conflict genesis. This is the most recent block where all candidates still "agreed."
 
-![Hierarchical conflict resolution](png/07-hierarchical.png)
+![Hierarchical conflict resolution](png/04-hierarchical.png)
 
 ### Step 3: Partition into Subgroups
 
@@ -108,7 +108,7 @@ Subgroups with higher rank are eliminated. Only the subgroup(s) with the minimum
 
 ### Step 6: Tie-Breaking (if needed)
 
-If multiple subgroups share the minimum rank, the tie-breaking algorithm (Chapter 08) selects the winner.
+If multiple subgroups share the minimum rank, the tie-breaking algorithm (Chapter 07) selects the winner.
 
 ### Step 7: Iterate
 
