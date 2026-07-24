@@ -237,7 +237,7 @@ gray_block = red_block whose next_chain_ancestor matches the winning subgroup's
 Gray blocks:
 - Are counted as **neutral** in UMC voting
 - Don't contribute to the winning or losing side
-- Help prevent unfair disadvantage to subgroups with red blocks that happen to agree with them
+- Help prevent unfair disadvantage to subgroups with non-blue blocks that happen to agree with them
 
 ## Complexity
 

@@ -71,11 +71,11 @@ Consider a scenario where an attacker mines blocks that:
 1. Reference the honest subgroup (making them "agree" with it)
 2. Are not included in the honest subgroup's k-cluster (they are red)
 
-These red blocks agree with the honest subgroup but are not part of its cluster. If they cast negative votes in UMC voting, they unfairly hurt the honest subgroup's chances of passing. The honest subgroup's rank would be artificially inflated.
+These non-blue blocks agree with the honest subgroup but are not part of its cluster. If they cast negative votes in UMC voting, they unfairly hurt the honest subgroup's chances of passing. The honest subgroup's rank would be artificially inflated.
 
 ![Representative problem: attacker blocks hurt honest subgroup](png/06-representative-problem.png)
 
-Here, T1 and T2 are attacker blocks. They are **red** (not in the honest cluster) but they **agree** with the honest subgroup (they share a chain extension above CG). If T1 and T2 are treated as normal red blocks in UMC voting, they cast negative votes and hurt the honest subgroup's score.
+Here, T1 and T2 are attacker blocks. They are **non-blue** (not in the honest cluster) but they **agree** with the honest subgroup (they share a chain extension above CG). If T1 and T2 are treated as normal non-blue blocks in UMC voting, they cast negative votes and hurt the honest subgroup's score.
 
 ### The Paper's Solution: Representatives
 
@@ -132,16 +132,16 @@ Gray blocks don't cast any vote — they are effectively **ignored** in UMC voti
 | **k-colourings per rank check** | One per representative | One (from VSP) |
 | **UMC voting** | Standard (blues vs reds) | Three-way (blues vs reds, grays neutral) |
 | **Cost** | O(representatives × zone) | O(zone) |
-| **Effectiveness** | Same: prevents agreeing reds from hurting subgroup | Same: prevents agreeing reds from hurting subgroup |
+| **Effectiveness** | Same: prevents agreeing non-blues from hurting subgroup | Same: prevents agreeing non-blues from hurting subgroup |
 
-The gray block approach achieves the same outcome — red blocks that agree with a subgroup don't harm that subgroup — at a fraction of the computational cost.
+The gray block approach achieves the same outcome — non-blue blocks that agree with a subgroup don't harm that subgroup — at a fraction of the computational cost.
 
-![Gray block classification](png/06-gray-classification.png)
+![Gray block classification](png/03-gray-blocks.png)
 
-In this diagram:
-- **Blue blocks** (VSP, W1, W2, W3): In the cluster, vote +1 in UMC
-- **R1** (red): Not in cluster AND doesn't agree with winning subgroup → votes -1
-- **G1, G2** (gray): Not in cluster but DO agree → neutral, no vote
+In this diagram (K=0, Right side wins):
+- **Blue blocks** (T3, H, E, C, CG, Virtual): The selected parent chain — these form the cluster and vote +1 in UMC
+- **Red blocks** (T1, F, D, B): On the opposing Left side — excluded from the cluster and don't agree with the winning subgroup, so they vote -1
+- **Gray blocks** (G, T2): On the winning Right side but excluded from the cluster — they agree with the winning subgroup, so they are neutralized and cast no vote
 
 ### Summary of the Evolution
 

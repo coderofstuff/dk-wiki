@@ -33,7 +33,7 @@ This directory contains the DAGKnight wiki — a beginner-friendly, self-contain
     dot -Tpng wiki/dot/XX-filename.dot -o /dev/null
     ```
 12. **Always update the corresponding wiki text**. When a diagram is changed (layout, labels, added/removed elements, etc.), the markdown chapter that references it MUST be updated to match. The prose describing the diagram should accurately reflect what the reader sees. If a label changes in the DOT, the markdown bullet points referencing that label must change too. Never leave a diagram out of sync with its surrounding text.
-13. **Visually verify every rendered image**. After rendering a PNG, open it and confirm it matches the text describing it. Check layout direction (past should be on the left, future on the right), label placement, and that the prose accurately describes what the reader sees. Use `rankdir=RL` for DAG diagrams (since edges point backwards in time, RL is needed to put past on the left and future on the right). Note: `labelloc` is relative to the rank direction — `labelloc="t"` means "top of the rank direction", so with `rankdir=BT`, `t` renders at the visual bottom.
+13. **Visually verify every rendered image**. After rendering a PNG, open it and confirm it matches the text describing it. Check layout direction (past should be at the bottom, future at the top), label placement, and that the prose accurately describes what the reader sees. Use `rankdir=TB` for all DAG diagrams (edges point backwards in time from newer to older, so TB puts newer/future at top and older/past at bottom). Note: `labelloc` is relative to the rank direction — `labelloc="t"` means "top of the rank direction", so with `rankdir=TB`, `t` renders at the visual top.
 
 ### Knowledge
 
@@ -42,7 +42,7 @@ This directory contains the DAGKnight wiki — a beginner-friendly, self-contain
 ### Structure
 
 15. **No inline DOT code blocks**. DOT source belongs only in `dot/`. Markdown chapters reference `png/` files.
-16. **Keep DOT files minimal**. Use compact node labels, reasonable layouts (`rankdir=BT` or `rankdir=LR`), and include legends when colors carry meaning.
+16. **Keep DOT files minimal**. Use compact node labels, use `rankdir=TB` for DAG diagrams, and include legends when colors carry meaning.
 
 ### DOT Style
 
