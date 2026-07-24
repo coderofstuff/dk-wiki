@@ -1,12 +1,12 @@
 digraph gray_blocks {
-    rankdir=BT;
+    rankdir=TB;
     nodesep=0.8;
     ranksep=0.1;
     node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
     label="K=0: Right side wins — only T3→H→E→C→CG is blue (cluster)";
-    labelloc=b;
+    labelloc=t;
 
     CG [label="CG", fillcolor=lightskyblue, shape=doublecircle];
 
@@ -16,7 +16,7 @@ digraph gray_blocks {
     // Left side: RED (opposes winning side)
     subgraph cluster_left {
         label="Left side";
-        labelloc=b;
+        labelloc=t;
         style="dashed";
         color=red;
         B [label="B", fillcolor=salmon];
@@ -28,7 +28,7 @@ digraph gray_blocks {
     // Right side: BLUE chain + GRAY blocks
     subgraph cluster_right {
         label="Right side";
-        labelloc=b;
+        labelloc=t;
         style="dashed";
         color=blue;
         C [label="C", fillcolor=lightskyblue];

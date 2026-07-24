@@ -1,5 +1,5 @@
 digraph agreement_next_iteration {
-    rankdir=BT;
+    rankdir=TB;
     nodesep=0.8;
     ranksep=0.1;
     node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
@@ -15,7 +15,7 @@ digraph agreement_next_iteration {
     // Left side: EXACT SAME as original
     subgraph cluster_left {
         label="";
-        labelloc=b;
+        labelloc=t;
         style="dashed";
         color=gray;
         B [label="B", fillcolor=lightgray];
@@ -27,14 +27,14 @@ digraph agreement_next_iteration {
      // Right side: EXACT SAME as original
     subgraph cluster_right {
         label="";
-        labelloc=b;
+        labelloc=t;
         style="dashed";
         color=gray;
         C [label="C", fillcolor=lightgray];
         E [label="E", fillcolor=orange, shape=doublecircle];
         subgraph cluster_right_left {
             label="Left side";
-            labelloc=b;
+            labelloc=t;
             style="dashed";
             color=blue
             G [label="G", fillcolor=lightskyblue];
@@ -43,7 +43,7 @@ digraph agreement_next_iteration {
 
         subgraph cluster_right_right {
             label="Right side";
-            labelloc=b;
+            labelloc=t;
             style="dashed";
             color=orange
             H [label="H", fillcolor=lightyellow];

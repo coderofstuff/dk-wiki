@@ -1,12 +1,12 @@
 digraph conflict_zone_diamond {
-    rankdir=BT;
+    rankdir=TB;
     nodesep=0.8;
     ranksep=0.1;
     node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
     label="Conflict Zone Diamond: Future(CG) ∩ { Past(T1) ∪ ... ∪ Past(TN) }";
-    labelloc=b;
+    labelloc=t;
 
     CG [label="CG", fillcolor=lightgreen, shape=doublecircle];
 
@@ -16,7 +16,7 @@ digraph conflict_zone_diamond {
     // Left side (matches agreement cluster structure, invisible border)
     subgraph cluster_left {
         label="";
-        labelloc=b;
+        labelloc=t;
         style="dashed";
         color=white;
         penwidth=0;
@@ -29,7 +29,7 @@ digraph conflict_zone_diamond {
     // Right side (matches agreement cluster structure, invisible border)
     subgraph cluster_right {
         label="";
-        labelloc=b;
+        labelloc=t;
         style="dashed";
         color=white;
         penwidth=0;

@@ -1,5 +1,5 @@
 digraph agreement_example {
-    rankdir=BT;
+    rankdir=TB;
     nodesep=0.8;
     ranksep=0.1;
     node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
@@ -15,7 +15,7 @@ digraph agreement_example {
     // Left side: chain CG → B → D → F → T1
     subgraph cluster_left {
         label="Left side";
-        labelloc=b;
+        labelloc=t;
         style="dashed";
         color=blue;
         B [label="B", fillcolor=lightskyblue];
@@ -27,7 +27,7 @@ digraph agreement_example {
      // Right side: chain CG → C → E → G → T2 (with T3 branching off H)
     subgraph cluster_right {
         label="Right side";
-        labelloc=b;
+        labelloc=t;
         style="dashed";
         color=orange;
         C [label="C", fillcolor=lightyellow];
