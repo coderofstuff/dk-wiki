@@ -9,6 +9,9 @@ digraph agreement_example {
 
     CG [label="CG", fillcolor=orange, shape=doublecircle];
 
+    // Virtual block
+    Virtual [label="Virtual", shape=circle, style=dotted, fillcolor=white];
+
     // Left side: chain CG → B → D → F → T1
     subgraph cluster_left {
         label="Left side";
@@ -63,4 +66,9 @@ digraph agreement_example {
     // Bottom chain from CG
     CG -> CG_lbl [style=invis];
     CG_lbl -> NOTE [style=invis];
+
+    // Virtual block points to all tips
+    Virtual -> T1 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T2 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T3 [color=gray60, penwidth=1.0, style=dashed];
 }

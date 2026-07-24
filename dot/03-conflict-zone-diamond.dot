@@ -1,54 +1,65 @@
 digraph conflict_zone_diamond {
     rankdir=BT;
-    nodesep=0.5;
-    ranksep=0.4;
+    nodesep=0.8;
+    ranksep=0.1;
     node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
-    label="Conflict Zone Diamond: future(CG) ∩ past(tips)";
+    label="Conflict Zone Diamond: Future(CG) ∩ { Past(T1) ∪ ... ∪ Past(TN) }";
+    labelloc=b;
 
-    // Blocks INSIDE the diamond (conflict zone)
-    F [label="F", fillcolor=lightskyblue];
-    G [label="G", fillcolor=lightyellow];
-    D [label="D", fillcolor=lightskyblue];
-    E [label="E", fillcolor=lightyellow];
-    H [label="H", fillcolor=lightgray];
-    C [label="C", fillcolor=orange, shape=doublecircle];
+    CG [label="CG", fillcolor=lightgreen, shape=doublecircle];
 
-    // Blocks OUTSIDE the diamond
-    OUTSIDE1 [label="X1", fillcolor=lightgray];
-    OUTSIDE2 [label="X2", fillcolor=lightgray];
-    OUTSIDE3 [label="X3", fillcolor=lightgray];
-    OUTSIDE4 [label="X4", fillcolor=lightgray];
+    // Virtual block
+    Virtual [label="Virtual", shape=circle, style="dotted,filled", fillcolor=lightgreen];
 
-    // Edges inside the diamond
-    F -> D;
-    G -> E;
-    D -> C;
-    E -> C;
-    D -> H;
-    E -> H;
-    H -> C;
-
-    // Edges crossing the diamond boundary (dashed to show they're ignored)
-    OUTSIDE1 -> F [style=dashed, color=red];
-    OUTSIDE2 -> G [style=dashed, color=red];
-    F -> OUTSIDE3 [style=dashed, color=red];
-    G -> OUTSIDE4 [style=dashed, color=red];
-
-    // Force ranking so layout is correct
-    { rank=same; OUTSIDE1; OUTSIDE2; }
-    { rank=same; F; G; }
-    { rank=same; D; E; H; }
-    { rank=same; C; }
-    { rank=same; OUTSIDE3; OUTSIDE4; }
-
-    // The conflict zone cluster
-    subgraph cluster_diamond {
-        label="CONFLICT ZONE (diamond)\nfuture(CG) ∩ past(tips)\nOnly these blocks are colored and voted";
-        labelloc=t;
-        style=filled;
-        fillcolor=moccasin;
-        F; G; D; E; H; C;
+    // Left side
+    subgraph cluster_left {
+        style=invis;
+        B [label="B", fillcolor=lightgreen];
+        D [label="D", fillcolor=lightgreen];
+        F [label="F", fillcolor=lightgreen];
+        T1 [label="T1", fillcolor=lightgreen];
     }
+
+    // Right side
+    subgraph cluster_right {
+        style=invis;
+        C [label="C", fillcolor=lightgreen];
+        E [label="E", fillcolor=lightgreen];
+        G [label="G", fillcolor=lightgreen];
+        T2 [label="T2", fillcolor=lightgreen];
+        H [label="H", fillcolor=lightgreen];
+        T3 [label="T3", fillcolor=lightgreen];
+    }
+
+    // Outside diamond - parallel to CG
+    X1 [label="X1", fillcolor=lightgray, style=filled];
+    X2 [label="X2", fillcolor=lightgray, style=filled];
+
+    // Blue edges = selected parent (chain-parent path)
+    B -> CG [color=blue, penwidth=2.0];
+    C -> CG [color=blue, penwidth=2.0];
+    D -> B [color=blue, penwidth=2.0];
+    E -> C [color=blue, penwidth=2.0];
+    F -> D [color=blue, penwidth=2.0];
+    G -> E [color=blue, penwidth=2.0];
+    H -> E [color=blue, penwidth=2.0];
+    T1 -> F [color=blue, penwidth=2.0];
+    T2 -> G [color=blue, penwidth=2.0];
+    T3 -> H [color=blue, penwidth=2.0];
+
+    // Gray dashed = non-selected parent
+    T2 -> H [color=gray60, penwidth=1.0, style=dashed];
+    F -> C [color=gray60, penwidth=1.0, style=dashed];
+    E -> B [color=gray60, penwidth=1.0, style=dashed];
+
+    // B -> X1 and C -> X2 cross diamond boundary (ignored)
+    B -> X1 [style=dashed, color=red];
+    C -> X2 [style=dashed, color=red];
+
+    // Virtual block points to all tips
+    Virtual -> T1 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T2 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T3 [color=gray60, penwidth=1.0, style=dashed];
 }

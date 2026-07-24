@@ -30,6 +30,35 @@ The main chain serves two purposes:
 
 2. **Stability**: When network conditions change, only recent chain-parent selections may change. Past selections remain stable, preventing retroactive reordering.
 
+## Conflict Zone
+
+The **conflict zone** is the region of the DAG between the conflict genesis and the current tips, bounded by:
+
+```
+conflict_zone = Future(CG) ∩ { Past(T1) ∪ Past(T2) ∪ ... ∪ Past(TN) }
+```
+
+The conflict zone is where DAGKnight performs its analysis (k-colouring, UMC voting, etc.). Everything below the conflict genesis is already resolved; everything above the tips hasn't happened yet.
+
+### Conflict Genesis
+
+A **conflict genesis** is the point where competing chains diverge. Formally, it's the **latest common chain ancestor** of two or more competing tip groups.
+
+![Conflict zone visualization](png/03-conflict-zone.png)
+
+Here, C is the conflict genesis because it's the latest block that is a chain ancestor of both F and G. The conflict zone is the region from C up to the tips.
+
+### The Diamond Shape
+
+The conflict zone forms a **diamond** shape in the DAG. It's the set of blocks that are both in the future of the conflict genesis AND in the past of all current tips.
+
+![Conflict zone diamond](png/03-conflict-zone-diamond.png)
+
+Some blocks may have parents or children that are outside this diamond from the POV of the entire DAG. But for the purposes of coloring and voting, those outside blocks are **ignored** entirely — only blocks inside the diamond participate in k-colouring and UMC voting.
+
+- **Inside the diamond**: Colored (blue/red/gray) and participate in UMC voting
+- **Outside the diamond**: Ignored for this conflict zone's analysis
+
 ## Agreement
 
 ### Definition
@@ -63,35 +92,6 @@ Dashed gray edges show non-selected parents (e.g., F also references C, but did 
 ### Why Agreement Matters
 
 Agreement allows DAGKnight to group competing tips into **subgroups** of internally-consistent candidates. Each subgroup represents a "side" in a conflict, and DAGKnight evaluates each subgroup independently.
-
-## Conflict Genesis
-
-A **conflict genesis** is the point where competing chains diverge. Formally, it's the **latest common chain ancestor** of two or more competing tip groups.
-
-![Conflict zone visualization](png/03-conflict-zone.png)
-
-Here, C is the conflict genesis because it's the latest block that is a chain ancestor of both F and G. The conflict zone is the region from C up to the tips.
-
-## Conflict Zone
-
-The **conflict zone** is the region of the DAG between the conflict genesis and the current tips, bounded by:
-
-```
-conflict_zone = future(conflict_genesis) ∩ past(tips)
-```
-
-### The Diamond Shape
-
-The conflict zone forms a **diamond** shape in the DAG. It's the set of blocks that are both in the future of the conflict genesis AND in the past of all current tips.
-
-![Conflict zone diamond](png/03-conflict-zone-diamond.png)
-
-Some blocks may have parents or children that are outside this diamond from the POV of the entire DAG. But for the purposes of coloring and voting, those outside blocks are **ignored** entirely — only blocks inside the diamond participate in k-colouring and UMC voting.
-
-- **Inside the diamond**: Colored (blue/red/gray) and participate in UMC voting
-- **Outside the diamond**: Ignored for this conflict zone's analysis
-
-The conflict zone is where DAGKnight performs its analysis (k-colouring, UMC voting, etc.). Everything below the conflict genesis is already resolved; everything above the tips hasn't happened yet.
 
 ## Gray Blocks
 
@@ -155,7 +155,7 @@ The VSP represents "what the next honest block would select as its chain-parent 
 | **Chain-parent** | Unique parent per block forming a main chain | Provides canonical ordering |
 | **Agreement** | Blocks sharing a chain extension above conflict point | Groups blocks into subgroups |
 | **Conflict genesis** | Latest common chain ancestor of competing tips | Boundary of conflict zone |
-| **Conflict zone** | `future(CG) ∩ past(tips)` | Region analyzed by DAGKnight |
+| **Conflict zone** | `Future(CG) ∩ { Past(T1) ∪ ... ∪ Past(TN) }` | Region analyzed by DAGKnight |
 | **Blue block** | Part of the k-cluster | Supports cluster |
 | **Red block** | Not in the k-cluster | Opposes cluster |
 | **Gray block** | Red but agrees with winning subgroup | Neutral in voting |

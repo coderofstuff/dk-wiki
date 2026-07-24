@@ -1,4 +1,4 @@
-digraph agreement_example {
+digraph agreement_next_iteration {
     rankdir=BT;
     nodesep=0.8;
     ranksep=0.1;
@@ -8,6 +8,11 @@ digraph agreement_example {
     label="Next hierarchical iteration: E is the new conflict genesis\nT2 and T3 are the new tips";
 
     CG [label="CG", fillcolor=lightgray, shape=doublecircle];
+    X1 [label="X1", fillcolor=lightgray];
+    X2 [label="X2", fillcolor=lightgray];
+
+    // Virtual block
+    Virtual [label="Virtual", shape=circle, style=dotted, fillcolor=white];
 
     // Left side: EXACT SAME as original
     subgraph cluster_left {
@@ -73,10 +78,19 @@ digraph agreement_example {
     F -> C [color=gray60, penwidth=1.0, style=dashed];
     E -> B [color=gray60, penwidth=1.0, style=dashed];
 
+    // B -> X1 and C -> X2 are non-selected parents
+    B -> X1 [color=gray60, penwidth=1.0, style=dashed];
+    C -> X2 [color=gray60, penwidth=1.0, style=dashed];
+
     // E label close to E
     E -> E_lbl [style=invis, constraint=false];
 
     // Bottom chain from CG
     CG -> E_lbl [style=invis];
     E_lbl -> NOTE [style=invis];
+
+    // Virtual block points to all tips
+    Virtual -> T1 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T2 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T3 [color=gray60, penwidth=1.0, style=dashed];
 }
