@@ -1,17 +1,12 @@
-digraph conflict_zone_diamond {
+digraph conflict_zone {
     rankdir=BT;
     nodesep=0.8;
     ranksep=0.1;
-    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6, fillcolor=lightgray];
     edge [arrowsize=0.6, color=gray60];
 
-    label="Conflict Zone Diamond: Future(CG) ∩ { Past(T1) ∪ ... ∪ Past(TN) }";
+    label="Virtual, the next unmined block, pointing to the DAG tips";
     labelloc=b;
-
-    CG [label="CG", fillcolor=lightgreen, shape=doublecircle];
-
-    // Virtual block
-    Virtual [label="Virtual", shape=circle, style="dotted,filled", fillcolor=lightgreen];
 
     // Left side (matches agreement cluster structure, invisible border)
     subgraph cluster_left {
@@ -20,10 +15,10 @@ digraph conflict_zone_diamond {
         style="dashed";
         color=white;
         penwidth=0;
-        B [label="B", fillcolor=lightgreen];
-        D [label="D", fillcolor=lightgreen];
-        F [label="F", fillcolor=lightgreen];
-        T1 [label="T1", fillcolor=lightgreen];
+        B [label="B"];
+        D [label="D"];
+        F [label="F"];
+        T1 [label="T1", fillcolor="lightgreen"];
     }
 
     // Right side (matches agreement cluster structure, invisible border)
@@ -33,17 +28,21 @@ digraph conflict_zone_diamond {
         style="dashed";
         color=white;
         penwidth=0;
-        C [label="C", fillcolor=lightgreen];
-        E [label="E", fillcolor=lightgreen];
-        G [label="G", fillcolor=lightgreen];
-        T2 [label="T2", fillcolor=lightgreen];
-        H [label="H", fillcolor=lightgreen];
-        T3 [label="T3", fillcolor=lightgreen];
+        E [label="E"];
+        G [label="G"];
+        T2 [label="T2", fillcolor="lightgreen"];
+        H [label="H"];
+        T3 [label="T3", fillcolor="lightgreen"];
+        C [label="C"];
     }
 
-    // Outside diamond - parallel to CG
-    X1 [label="X1", color="lightgray", fillcolor="white", style=filled];
-    X2 [label="X2", color="lightgray", fillcolor="white", style=filled];
+    // Bottom blocks
+    CG [label="CG"];
+    X1 [label="X1"];
+    X2 [label="X2"];
+
+    // Virtual block
+    Virtual [label="Virtual", shape=circle, style=dotted, fillcolor=lightgray];
 
     // Blue edges = selected parent (chain-parent path)
     B -> CG [color=blue, penwidth=2.0];
@@ -57,14 +56,14 @@ digraph conflict_zone_diamond {
     T2 -> G [color=blue, penwidth=2.0];
     T3 -> H [color=blue, penwidth=2.0];
 
-    // Gray dashed = non-selected parent
-    T2 -> H [color=gray60, penwidth=1.0, style=dashed];
+    // Gray dashed edges = non-selected parents
     F -> C [color=gray60, penwidth=1.0, style=dashed];
+    T2 -> H [color=gray60, penwidth=1.0, style=dashed];
     E -> B [color=gray60, penwidth=1.0, style=dashed];
 
-    // B -> X1 and C -> X2 cross diamond boundary (ignored)
-    B -> X1 [style=dashed];
-    C -> X2 [style=dashed];
+    // B -> X1 and C -> X2 are non-selected parents
+    B -> X1 [color=gray60, penwidth=1.0, style=dashed];
+    C -> X2 [color=gray60, penwidth=1.0, style=dashed];
 
     // Virtual block points to all tips
     Virtual -> T1 [color=gray60, penwidth=1.0, style=dashed];

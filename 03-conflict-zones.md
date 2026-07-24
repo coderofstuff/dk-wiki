@@ -1,5 +1,9 @@
 # 03 — Conflict Zones
 
+![DAG-with-Tips](png/03-dag-with-tips.png)
+
+In this image, the DAGKnight selected parents of the blocks are shown with **blue arrows**. The tips of the DAG are shown in green. **Virtual** is the unmined next block pointing to the DAG tips. It is for virtual that we need to run the DAGKnight algorithm for to determine it's selected parent among T1, T2 or T3.
+
 ## The Chain-Parent
 
 In a DAG, blocks have multiple parents. Similar to GhostDAG, DAGKnight uses the concept of a **chain-parent** (also known as the **selected parent**) — a single designated parent per block that forms a "main chain" through the DAG from the POV of this block.
@@ -20,7 +24,7 @@ The chain-parent of B is the block that **minimizes B's rank**. If B has two par
 - rank(B via P1) = 3
 - rank(B via P2) = 5
 
-Then P1 is B's chain-parent. (Rank will be explained in detail in Chapter 06.)
+Then P1 is B's chain-parent. Rank will be explained in detail in Chapter 06.
 
 ### Why a Main Chain?
 
@@ -32,25 +36,25 @@ The main chain serves two purposes:
 
 ## Conflict Zone
 
-The **conflict zone** is the region of the DAG between the conflict genesis and the current tips, bounded by:
+The **conflict zone** is the region of the DAG between the conflict genesis and the current tips (T1, T2, ..., TN), bounded by for which the DAGKnight algorithm is run:
 
 ```
 conflict_zone = Future(CG) ∩ { Past(T1) ∪ Past(T2) ∪ ... ∪ Past(TN) }
 ```
 
-The conflict zone is where DAGKnight performs its analysis (k-colouring, UMC voting, etc.). Everything below the conflict genesis is already resolved; everything above the tips hasn't happened yet.
+If forms the region for which the components of DAGKnight such as K-Colouring, Tie-Breaking and Ranking are performed. Only blocks within this region is considered in the calculation.
 
 ### Conflict Genesis
 
-A **conflict genesis** is the point where competing chains diverge. Formally, it's the **latest common chain ancestor** of two or more competing tip groups.
+A **conflict genesis** is the point where competing tips diverge on how they extend the POV of the conflict genesis. Formally, it's the **latest common chain ancestor** of two or more competing tips.
 
 ![Conflict zone visualization](png/03-conflict-zone.png)
 
-Here, C is the conflict genesis because it's the latest block that is a chain ancestor of both F and G. The conflict zone is the region from C up to the tips.
+Here, **CG** is the conflict genesis because it's the latest chain block that is a chain ancestor of both T1, T2 and T3. The conflict zone is the region from CG up to the tips.
 
 ### The Diamond Shape
 
-The conflict zone forms a **diamond** shape in the DAG. It's the set of blocks that are both in the future of the conflict genesis AND in the past of all current tips.
+The conflict zone forms a **diamond** shape in the DAG. It's the set of blocks that are both in the future of the conflict genesis AND in the union of the past of the tips.
 
 ![Conflict zone diamond](png/03-conflict-zone-diamond.png)
 
@@ -63,7 +67,7 @@ Some blocks may have parents or children that are outside this diamond from the 
 
 ### Definition
 
-A set of blocks X **agrees** in a DAG G relative to a conflict genesis g if their latest common chain ancestor is a chain-descendant of g:
+A set of blocks X **agrees** in a DAG G relative to a conflict genesis g if if these blocks have the same **next chain ancestor** after g:
 
 ```
 There exists some block g' such that:
@@ -76,6 +80,8 @@ There exists some block g' such that:
 Two blocks "agree" when they share a common chain-extension above the conflict point. They are on the same "side" of a conflict.
 
 ![Agreement visualization](png/03-agreement.png)
+
+Here, there are 2 sides to the conflict, `[T1]` whose next chain ancestor after CG is `B` and `[T2, T2]` whose next chain ancestor after CG is `C`
 
 Three tips compete: **T1** (left side, blue) and **T2, T3** (right side, yellow/orange).
 
@@ -91,7 +97,7 @@ Dashed gray edges show non-selected parents (e.g., F also references C, but did 
 
 ### Why Agreement Matters
 
-Agreement allows DAGKnight to group competing tips into **subgroups** of internally-consistent candidates. Each subgroup represents a "side" in a conflict, and DAGKnight evaluates each subgroup independently.
+Agreement allows DAGKnight to group competing tips into **subgroups** of internally-agreeing candidates. Each subgroup represents a "side" in a conflict, and DAGKnight evaluates each subgroup independently.
 
 ## Gray Blocks
 

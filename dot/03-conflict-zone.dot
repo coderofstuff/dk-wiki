@@ -18,7 +18,7 @@ digraph conflict_zone {
         B [label="B"];
         D [label="D"];
         F [label="F"];
-        T1 [label="T1"];
+        T1 [label="T1", fillcolor="lightgreen"];
     }
 
     // Right side (matches agreement cluster structure, invisible border)
@@ -30,14 +30,14 @@ digraph conflict_zone {
         penwidth=0;
         E [label="E"];
         G [label="G"];
-        T2 [label="T2"];
+        T2 [label="T2", fillcolor="lightgreen"];
         H [label="H"];
-        T3 [label="T3"];
+        T3 [label="T3", fillcolor="lightgreen"];
         C [label="C"];
     }
 
     // Bottom blocks
-    CG [label="CG"];
+    CG [label="CG", fillcolor="lightgreen", shape="doublecircle"];
     X1 [label="X1"];
     X2 [label="X2"];
 
