@@ -1,0 +1,78 @@
+digraph gray_blocks {
+    rankdir=BT;
+    nodesep=0.8;
+    ranksep=0.1;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
+    edge [arrowsize=0.6, color=gray60];
+
+    label="K=0: Right side wins — only T3→H→E→C→CG is blue (cluster)";
+    labelloc=b;
+
+    CG [label="CG", fillcolor=lightskyblue, shape=doublecircle];
+
+    // Virtual block
+    Virtual [label="Virtual", shape=circle, style="dotted,filled", fillcolor=lightskyblue];
+
+    // Left side: RED (opposes winning side)
+    subgraph cluster_left {
+        label="Left side";
+        labelloc=b;
+        style="dashed";
+        color=red;
+        B [label="B", fillcolor=salmon];
+        D [label="D", fillcolor=salmon];
+        F [label="F", fillcolor=salmon];
+        T1 [label="T1", fillcolor=salmon];
+    }
+
+    // Right side: BLUE chain + GRAY blocks
+    subgraph cluster_right {
+        label="Right side";
+        labelloc=b;
+        style="dashed";
+        color=blue;
+        C [label="C", fillcolor=lightskyblue];
+        E [label="E", fillcolor=lightskyblue];
+        G [label="G", fillcolor=lightgray];
+        T2 [label="T2", fillcolor=lightgray];
+        H [label="H", fillcolor=lightskyblue];
+        T3 [label="T3", fillcolor=lightskyblue];
+    }
+
+    // CG label node
+    CG_lbl [label="conflict genesis", shape=plaintext, style=filled, fillcolor=none, fontsize=10, fontcolor=gray40, width=0];
+
+    // Annotation at bottom
+    NOTE [label="At K=0: only selected parent chain is blue (cluster)\nT3→H→E→C→CG = blue (cluster, supports winning side)\nG, T2 = gray (excluded from cluster but agrees with winning side)\nT1, F, D, B = red (opposes winning side)\n\nBlue arrows = selected parent (chain-parent)\nDashed gray = non-selected parent", shape=box, style=filled, fillcolor=lightcyan, fontsize=9, width=7];
+
+    // Blue edges = selected parent (chain-parent path)
+    // Left side (red)
+    D -> B [color=gray60, penwidth=2.0];
+    F -> D [color=gray60, penwidth=2.0];
+    T1 -> F [color=gray60, penwidth=2.0];
+    // Right side (blue chain)
+    H -> E [color=blue, penwidth=2.0];
+    E -> C [color=blue, penwidth=2.0];
+    T3 -> H [color=blue, penwidth=2.0];
+    // Right side (gray, excluded)
+    G -> E [color=gray60, penwidth=2.0];
+    T2 -> G [color=gray60, penwidth=2.0];
+
+    // Blue to CG (selected parent of B and C)
+    B -> CG [color=gray60, penwidth=2.0];
+    C -> CG [color=blue, penwidth=2.0];
+
+    // Gray dashed = non-selected parent
+    T2 -> H [color=gray60, penwidth=1.0, style=dashed];
+    F -> C [color=gray60, penwidth=1.0, style=dashed];
+    E -> B [color=gray60, penwidth=1.0, style=dashed];
+
+    // Bottom chain from CG
+    CG -> CG_lbl [style=invis];
+    CG_lbl -> NOTE [style=invis];
+
+    // Virtual block points to all tips
+    Virtual -> T1 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T2 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T3 [color=gray60, penwidth=1.0, style=dashed];
+}

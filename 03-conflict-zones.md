@@ -101,36 +101,40 @@ Agreement allows DAGKnight to group competing tips into **subgroups** of interna
 
 ## Gray Blocks
 
-During k-colouring within a conflict zone, blocks are classified as:
+During k-colouring within a conflict zone for a subgroup, blocks are classified as:
 
-- **Blue**: Part of the selected k-cluster
-- **Red**: Not part of the k-cluster
-- **Gray**: A red block that **agrees** with the winning subgroup
+- **Blue**: Part of the k-cluster for the subgroup.
+- **Red**: Not part of the k-cluster for the subgroup AND **disagrees** with this subgroup.
+- **Gray**: Not part of the k-cluster for the subgroup BUT **agrees** with this subgroup
 
 ### Why Gray Blocks Exist
 
-Consider a red block R (not in the k-cluster) that shares a chain ancestor with the winning subgroup. This block is:
-- **Red** from the k-colouring perspective (it was excluded from the cluster)
+Consider a non-blue block R (not in the k-cluster) that shares a chain ancestor with the winning subgroup. This block is:
+- **Not blue** from the k-colouring perspective (it was excluded from the cluster)
 - But **aligned** with the winning subgroup (it's on their side of the conflict)
 
-![Gray block classification](png/06-gray-classification.png)
+![Gray blocks](png/03-gray-blocks.png)
 
-Gray blocks (G1, G2) are red (not in the cluster) but agree with the winning subgroup — they are neutralized in UMC voting.
+Gray blocks (G and T2 here) are not blue but agree with the current subgroup, so they don't vote negatively towards this group. This is because even if they are not in the blue cluster, they don't help strengthen the other side by virtue of them agreeing with this side.
+
+Here is a larger example showing how with Gray blocks, a low rank K=0 allows for a side to win in an obviously lopsided voting
+
+![Gray larger](png/03-gray-larger.png)
 
 ### How Gray Blocks Are Identified
 
-A red block is **gray** if:
+A block is **gray** if:
 
 ```
-next_chain_ancestor(red_block, conflict_genesis) ==
-next_chain_ancestor(winning_subgroup, conflict_genesis)
+next_chain_ancestor(non_blue_block, conflict_genesis) ==
+next_chain_ancestor(current_subgroup, conflict_genesis)
 ```
 
-In other words, the red block's next chain ancestor (going backward from the red block toward the conflict genesis) matches that of the winning subgroup.
+In other words, the block's next chain ancestor (going backward from the non-blue block toward the conflict genesis) matches that of the current subgroup.
 
 ### Why Gray Blocks Matter
 
-Gray blocks are counted as **neutral** in UMC voting. They are red (not in the k-cluster) but they agree with the winning side, so they shouldn't count against the winning cluster. This distinction is essential for fair evaluation:
+Gray blocks are counted as **neutral** in UMC voting. They are not blue (not in the k-cluster) but they agree with the winning side, so they shouldn't count against the winning cluster. This distinction is essential for fair evaluation:
 
 - **Blue work**: Supports the cluster
 - **Red work**: Opposes the cluster
@@ -163,6 +167,6 @@ The VSP represents "what the next honest block would select as its chain-parent 
 | **Conflict genesis** | Latest common chain ancestor of competing tips | Boundary of conflict zone |
 | **Conflict zone** | `Future(CG) ∩ { Past(T1) ∪ ... ∪ Past(TN) }` | Region analyzed by DAGKnight |
 | **Blue block** | Part of the k-cluster | Supports cluster |
-| **Red block** | Not in the k-cluster | Opposes cluster |
-| **Gray block** | Red but agrees with winning subgroup | Neutral in voting |
-| **VSP** | Highest blue-work tip in subgroup | Represents next block's selection |
+| **Red block** | Not in the k-cluster and disagrees with the subgroup | Opposes cluster |
+| **Gray block** | Not in the k-cluster but agrees with the subgroup | Neutral in voting |
+| **VSP** | Highest blue-work tip in subgroup | Represents virtual's selection for the current conflict zone conditioned upon virtual agreeing with this subgroup |
