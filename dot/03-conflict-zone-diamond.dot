@@ -13,18 +13,26 @@ digraph conflict_zone_diamond {
     // Virtual block
     Virtual [label="Virtual", shape=circle, style="dotted,filled", fillcolor=lightgreen];
 
-    // Left side
+    // Left side (matches agreement cluster structure, invisible border)
     subgraph cluster_left {
-        style=invis;
+        label="";
+        labelloc=b;
+        style="dashed";
+        color=white;
+        penwidth=0;
         B [label="B", fillcolor=lightgreen];
         D [label="D", fillcolor=lightgreen];
         F [label="F", fillcolor=lightgreen];
         T1 [label="T1", fillcolor=lightgreen];
     }
 
-    // Right side
+    // Right side (matches agreement cluster structure, invisible border)
     subgraph cluster_right {
-        style=invis;
+        label="";
+        labelloc=b;
+        style="dashed";
+        color=white;
+        penwidth=0;
         C [label="C", fillcolor=lightgreen];
         E [label="E", fillcolor=lightgreen];
         G [label="G", fillcolor=lightgreen];

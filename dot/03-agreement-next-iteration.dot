@@ -8,8 +8,6 @@ digraph agreement_next_iteration {
     label="Next hierarchical iteration: E is the new conflict genesis\nT2 and T3 are the new tips";
 
     CG [label="CG", fillcolor=lightgray, shape=doublecircle];
-    X1 [label="X1", fillcolor=lightgray];
-    X2 [label="X2", fillcolor=lightgray];
 
     // Virtual block
     Virtual [label="Virtual", shape=circle, style=dotted, fillcolor=white];
@@ -77,10 +75,6 @@ digraph agreement_next_iteration {
     T2 -> H [color=gray60, penwidth=1.0, style=dashed];
     F -> C [color=gray60, penwidth=1.0, style=dashed];
     E -> B [color=gray60, penwidth=1.0, style=dashed];
-
-    // B -> X1 and C -> X2 are non-selected parents
-    B -> X1 [color=gray60, penwidth=1.0, style=dashed];
-    C -> X2 [color=gray60, penwidth=1.0, style=dashed];
 
     // E label close to E
     E -> E_lbl [style=invis, constraint=false];

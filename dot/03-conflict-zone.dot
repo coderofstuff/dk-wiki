@@ -2,39 +2,47 @@ digraph conflict_zone {
     rankdir=BT;
     nodesep=0.8;
     ranksep=0.1;
-    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6, fillcolor=white];
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6, fillcolor=lightgray];
     edge [arrowsize=0.6, color=gray60];
 
     label="Conflict Zone: Future(CG) ∩ { Past(T1) ∪ ... ∪ Past(TN) }\nThis is the only region DAGKnight needs to analyze";
     labelloc=b;
 
-    // Left side grouping (invisible cluster for layout matching agreement diagram)
+    // Left side (matches agreement cluster structure, invisible border)
     subgraph cluster_left {
-        style=invis;
-        T1 [label="T1"];
-        F [label="F"];
-        D [label="D"];
+        label="";
+        labelloc=b;
+        style="dashed";
+        color=white;
+        penwidth=0;
         B [label="B"];
+        D [label="D"];
+        F [label="F"];
+        T1 [label="T1"];
     }
 
-    // Right side grouping (invisible cluster for layout matching agreement diagram)
+    // Right side (matches agreement cluster structure, invisible border)
     subgraph cluster_right {
-        style=invis;
-        T2 [label="T2"];
-        T3 [label="T3"];
-        G [label="G"];
-        H [label="H"];
+        label="";
+        labelloc=b;
+        style="dashed";
+        color=white;
+        penwidth=0;
         E [label="E"];
+        G [label="G"];
+        T2 [label="T2"];
+        H [label="H"];
+        T3 [label="T3"];
         C [label="C"];
     }
 
     // Bottom blocks
-    CG [label="CG", shape=doublecircle];
+    CG [label="CG"];
     X1 [label="X1"];
     X2 [label="X2"];
 
     // Virtual block
-    Virtual [label="Virtual", shape=circle, style=dotted, fillcolor=white];
+    Virtual [label="Virtual", shape=circle, style=dotted, fillcolor=lightgray];
 
     // Blue edges = selected parent (chain-parent path)
     B -> CG [color=blue, penwidth=2.0];
