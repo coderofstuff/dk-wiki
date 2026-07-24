@@ -1,5 +1,7 @@
 # 07 — Tie-Breaking
 
+**CAVEAT**: Chapter is still under construction and unreviewed
+
 ## When Tie-Breaking Is Needed
 
 During hierarchical conflict resolution, if two or more subgroups have the **same minimum rank**, we need a tie-breaking mechanism to select the winner.

@@ -1,5 +1,7 @@
 # 06 — Rank
 
+**CAVEAT**: Chapter is still under construction and unreviewed
+
 ## What Is Rank?
 
 The **rank** of a subgroup is the **minimum k** for which the k-cluster returned by k-colouring passes the UMC voting check.

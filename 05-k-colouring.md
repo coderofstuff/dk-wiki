@@ -1,5 +1,7 @@
 # 05 — K-Colouring
 
+**CAVEAT**: Chapter is still under construction and unreviewed
+
 ## The Problem
 
 We need to find a k-cluster (a subset where every block has at most k concurrent blocks within the subset). Finding the **maximum** k-cluster exactly is NP-hard.

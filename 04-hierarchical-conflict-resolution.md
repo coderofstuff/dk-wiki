@@ -1,5 +1,7 @@
 # 04 — Hierarchical Conflict Resolution
 
+**CAVEAT**: Chapter is still under construction and unreviewed
+
 ## The Main Algorithm
 
 DAGKnight's main ordering algorithm (Algorithm 2 in the paper) is called **Order-DAG**. It takes a DAG as input and returns:

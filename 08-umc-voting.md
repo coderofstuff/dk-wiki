@@ -1,5 +1,7 @@
 # 08 — UMC Voting
 
+**CAVEAT**: Chapter is still under construction and unreviewed
+
 ## The Problem
 
 K-Colouring gives us a k-cluster (the blue blocks). But having a large k-cluster is not enough — we need to verify that the cluster **uniformly covers** the DAG.
