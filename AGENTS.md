@@ -49,3 +49,7 @@ This directory contains the DAGKnight wiki — a beginner-friendly, self-contain
 17. **Node shapes**: circles for blocks, doublecircles for special blocks (genesis, conflict genesis), boxes for virtual blocks
 18. **Color convention**: blue (`lightskyblue`) for cluster members, red/salmon for excluded blocks, gray (`lightgray`) for gray blocks, orange for conflict genesis
 19. **Edge direction**: arrows point backwards in time (from newer to older), consistent with DAG convention
+
+## Additional Conventions
+
+See `./.ai/wiki-conventions.md` for terminology rules (non-agreeing vs attacker, non-blue vs red), diagram conventions, and chapter structure.

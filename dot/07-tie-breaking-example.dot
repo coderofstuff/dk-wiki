@@ -1,35 +1,68 @@
 digraph tie_breaking_example {
-    rankdir=RL;
-    nodesep=0.5;
-    ranksep=0.4;
-    node [shape=circle, style=filled, fontsize=9, width=0.6, height=0.6];
-    edge [arrowsize=0.5, color=gray60];
+    rankdir=TB;
+    nodesep=0.8;
+    ranksep=0.1;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
+    edge [arrowsize=0.6, color=gray60];
 
     label="Tie-Breaking: subgroup with earliest latest-witness wins";
 
-    GEN [label="genesis", fillcolor=orange];
-    A [label="A", fillcolor=lightskyblue];
-    B [label="B", fillcolor=lightskyblue, shape=doublecircle, xlabel="witness"];
-    C [label="C", fillcolor=lightskyblue, shape=doublecircle, xlabel="witness"];
-    D [label="D", fillcolor=lightskyblue, shape=doublecircle, xlabel="witness"];
-    E [label="E", fillcolor=lightskyblue];
+    CG [label="CG", fillcolor=orange, shape=doublecircle];
 
-    // Reference cluster
-    subgraph cluster_f {
-        label="Reference Cluster F (free search at g(k))\nF = {genesis, A, B, C, D, E}";
+    Virtual [label="Virtual", shape=circle, style=dotted, fillcolor=white];
+
+    subgraph cluster_left {
+        label="Reference Cluster F";
         labelloc=t;
-        style=filled;
-        fillcolor=aliceblue;
-
-        A -> GEN;
-        B -> A;
-        C -> A;
-        D -> B;
-        E -> C;
+        style="dashed";
+        color=blue;
+        fillcolor=moccasin;
+        style="dashed,filled";
+        B [label="B", fillcolor=lightskyblue, shape=doublecircle];
+        D [label="D", fillcolor=lightskyblue, shape=doublecircle];
+        F [label="F", fillcolor=lightskyblue];
+        T1 [label="T1", fillcolor=lightskyblue];
     }
 
-    subgraph cluster_result {
-        style=invis;
-        WINNER [label="Subgroup 1: conditioned chain = {genesis, A, D}\nWitnesses C₁ = {B, C}\nmax(C₁) = C, blue_work = 100\n\nSubgroup 2: conditioned chain = {genesis, A, E}\nWitnesses C₂ = {B, C, D}\nmax(C₂) = D, blue_work = 150\n\nWinner: Subgroup 1 (lower blue_work of latest witness)", shape=box, style=filled, fillcolor=lightgreen, fontsize=9];
+    subgraph cluster_right {
+        labelloc=t;
+        style="dashed";
+        color=orange;
+        C [label="C", fillcolor=lightskyblue, shape=doublecircle];
+        E [label="E", fillcolor=lightskyblue];
+        G [label="G", fillcolor=lightskyblue];
+        T2 [label="T2", fillcolor=lightskyblue];
+        H [label="H", fillcolor=lightskyblue];
+        T3 [label="T3", fillcolor=lightskyblue];
     }
+
+    CG_lbl [label="conflict genesis", shape=plaintext, style=filled, fillcolor=none, fontsize=10, fontcolor=gray40, width=0];
+
+    NOTE [label="Subgroup 1: chain = CG→B→D→F→T1\n  Witnesses: {B, D} (doublecircle)\n  Latest witness: D, blue_work(D) = 150\n\nSubgroup 2: chain = CG→C→E→G→T2\n  Witnesses: {C} (doublecircle)\n  Latest witness: C, blue_work(C) = 100\n\nWinner: Subgroup 2 (lower blue_work of latest witness)", shape=box, style=filled, fillcolor=lightcyan, fontsize=9, width=7];
+
+    // Blue chain-parent edges
+    D -> B [color=blue, penwidth=2.0];
+    F -> D [color=blue, penwidth=2.0];
+    T1 -> F [color=blue, penwidth=2.0];
+    E -> C [color=blue, penwidth=2.0];
+    G -> E [color=blue, penwidth=2.0];
+    T2 -> G [color=blue, penwidth=2.0];
+    H -> E [color=blue, penwidth=2.0];
+    T3 -> H [color=blue, penwidth=2.0];
+
+    B -> CG [color=blue, penwidth=2.0];
+    C -> CG [color=blue, penwidth=2.0];
+
+    // Cross edges
+    T2 -> H [color=gray60, penwidth=1.0, style=dashed];
+    F -> C [color=gray60, penwidth=1.0, style=dashed];
+    E -> B [color=gray60, penwidth=1.0, style=dashed];
+
+    CG -> CG_lbl [style=invis];
+    CG_lbl -> NOTE [style=invis];
+
+    Virtual -> T1 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T2 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T3 [color=gray60, penwidth=1.0, style=dashed];
+
 }

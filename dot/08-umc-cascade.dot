@@ -1,31 +1,67 @@
 digraph umc_cascade_example {
-    rankdir=RL;
-    nodesep=0.5;
-    ranksep=0.4;
-    node [shape=circle, style=filled, fontsize=9, width=0.6, height=0.6];
-    edge [arrowsize=0.5, color=gray60];
+    rankdir=TB;
+    nodesep=0.8;
+    ranksep=0.1;
+    node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
+    edge [arrowsize=0.6, color=gray60];
 
     label="UMC Cascade Voting: votes flow from future → past";
 
-    GEN [label="genesis", fillcolor=lightskyblue, shape=doublecircle, xlabel="+1"];
-    B [label="B", fillcolor=lightskyblue, xlabel="+1"];
-    C [label="C", fillcolor=lightskyblue, xlabel="+1"];
-    D [label="D", fillcolor=salmon, xlabel="red"];
-    E [label="E", fillcolor=lightskyblue, xlabel="+1"];
-    F [label="F", fillcolor=salmon, xlabel="red"];
-    G [label="G", fillcolor=lightskyblue, xlabel="+1"];
+    CG [label="CG", fillcolor=lightskyblue, shape=doublecircle, xlabel="+1"];
 
-    // Edges point backwards (newer → older)
-    G -> E;
-    G -> F;
-    F -> D;
-    E -> C;
-    D -> B;
-    C -> B;
-    B -> GEN;
+    Virtual [label="Virtual", shape=circle, style=dotted, fillcolor=lightskyblue];
 
-    subgraph cluster_votes {
-        style=invis;
-        VOTES [label="Vote computation (future → past):\n\nG:    blues=0, reds=0  → +1\nE:    blues=1(G), reds=0 → +1\nF:    red → doesn't vote\nC:    blues=2(E,G), reds=0 → +1\nD:    red → doesn't vote\nB:    blues=3(C,E,G), reds=2(D,F)\n      3-2+e ≥ 0 → +1\ngenesis: blues=4(B,C,E,G), reds=2(D,F)\n      4-2+e ≥ 0 → +1\n\nResult: genesis votes +1 → UMC passes", shape=box, style=filled, fillcolor=lightcyan, fontsize=8];
+    subgraph cluster_left {
+        label="Left side";
+        labelloc=t;
+        style="dashed";
+        color=blue;
+        B [label="B", fillcolor=lightskyblue, xlabel="+1"];
+        D [label="D", fillcolor=lightskyblue, xlabel="+1"];
+        F [label="F", fillcolor=salmon, xlabel="red"];
+        T1 [label="T1", fillcolor=salmon, xlabel="red"];
     }
+
+    subgraph cluster_right {
+        label="Right side";
+        labelloc=t;
+        style="dashed";
+        color=orange;
+        C [label="C", fillcolor=lightskyblue, xlabel="+1"];
+        E [label="E", fillcolor=lightskyblue, xlabel="+1"];
+        G [label="G", fillcolor=lightskyblue, xlabel="+1"];
+        T2 [label="T2", fillcolor=lightskyblue, xlabel="+1"];
+        H [label="H", fillcolor=lightskyblue, xlabel="+1"];
+        T3 [label="T3", fillcolor=lightskyblue, xlabel="+1"];
+    }
+
+    CG_lbl [label="conflict genesis", shape=plaintext, style=filled, fillcolor=none, fontsize=10, fontcolor=gray40, width=0];
+
+    NOTE [label="Vote cascade (blue ancestors vs red ancestors):\n\nT3: blues=0, reds=0  → +1\nH:  blues=1(T3), reds=0  → +1\nT2: blues=2(H,T3), reds=0  → +1\nT1: red → doesn't vote\nG:  blues=0, reds=0  → +1\nF:  red → doesn't vote\nE:  blues=1(G), reds=0  → +1\nC:  blues=2(G,E), reds=0  → +1\nD:  blues=0, reds=2(T1,F)  → +1\nB:  blues=3(C,E,G), reds=2(T1,F)  → +1\nCG: blues=4(B,C,E,G), reds=2(T1,F)\n     4-2+epsilon >= 0 → +1\n\nResult: CG votes +1 → UMC passes", shape=box, style=filled, fillcolor=lightcyan, fontsize=9, width=7];
+
+    // Blue chain-parent edges
+    D -> B [color=blue, penwidth=2.0];
+    F -> D [color=blue, penwidth=2.0];
+    T1 -> F [color=blue, penwidth=2.0];
+    E -> C [color=blue, penwidth=2.0];
+    G -> E [color=blue, penwidth=2.0];
+    T2 -> G [color=blue, penwidth=2.0];
+    H -> E [color=blue, penwidth=2.0];
+    T3 -> H [color=blue, penwidth=2.0];
+
+    B -> CG [color=blue, penwidth=2.0];
+    C -> CG [color=blue, penwidth=2.0];
+
+    // Cross edges
+    T2 -> H [color=gray60, penwidth=1.0, style=dashed];
+    F -> C [color=gray60, penwidth=1.0, style=dashed];
+    E -> B [color=gray60, penwidth=1.0, style=dashed];
+
+    CG -> CG_lbl [style=invis];
+    CG_lbl -> NOTE [style=invis];
+
+    Virtual -> T1 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T2 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T3 [color=gray60, penwidth=1.0, style=dashed];
+
 }

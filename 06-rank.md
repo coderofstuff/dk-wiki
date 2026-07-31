@@ -68,16 +68,16 @@ This reduces the number of k-colouring + UMC voting calls from O(max_k) to O(log
 
 ### The Problem
 
-Consider a scenario where an attacker mines blocks that:
+Consider a scenario where non-agreeing blocks are mined that:
 
 1. Reference the honest subgroup (making them "agree" with it)
 2. Are not included in the honest subgroup's k-cluster (they are red)
 
 These non-blue blocks agree with the honest subgroup but are not part of its cluster. If they cast negative votes in UMC voting, they unfairly hurt the honest subgroup's chances of passing. The honest subgroup's rank would be artificially inflated.
 
-![Representative problem: attacker blocks hurt honest subgroup](png/06-representative-problem.png)
+![Representative problem: non-agreeing blocks hurt honest subgroup](png/06-representative-problem.png)
 
-Here, T1 and T2 are attacker blocks. They are **non-blue** (not in the honest cluster) but they **agree** with the honest subgroup (they share a chain extension above CG). If T1 and T2 are treated as normal non-blue blocks in UMC voting, they cast negative votes and hurt the honest subgroup's score.
+Here, T2 and G are non-agreeing blocks. They are **non-blue** (not in the honest cluster) but they **agree** with the honest subgroup (they share a chain extension above CG). If T2 and G are treated as normal non-blue blocks in UMC voting, they cast negative votes and hurt the honest subgroup's score.
 
 ### The Paper's Solution: Representatives
 
@@ -103,7 +103,7 @@ def calculate_rank_with_representatives(subgroup, dag, other_tips):
     return None
 ```
 
-**Why this works**: Representatives are blocks that are in the subgroup's past but not in other subgroups' past. Attacker blocks that reference both the honest subgroup and the attacker subgroup are excluded (they're in both pasts).
+**Why this works**: Representatives are blocks that are in the subgroup's past but not in other subgroups' past. Non-agreeing blocks that reference both the honest subgroup and the non-agreeing subgroup are excluded (they're in both pasts).
 
 **Why this is expensive**: You must compute k-colouring for **each representative independently**. If there are N representatives, you pay N × (k-colouring + UMC-voting) per rank check.
 

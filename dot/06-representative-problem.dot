@@ -1,36 +1,70 @@
 digraph representative_problem {
-    rankdir=RL;
-    nodesep=0.5;
-    ranksep=0.4;
+    rankdir=TB;
+    nodesep=0.8;
+    ranksep=0.1;
     node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
-    label="Attacker blocks that agree with honest subgroup but are red\nWithout gray-blocks, T1,T2 cast negative votes and hurt the honest subgroup";
+    label="Representative Problem:\nRed blocks on the agreeing side hurt the honest subgroup at K=0";
 
-    H [label="H", fillcolor=lightskyblue];
-    E [label="E", fillcolor=lightskyblue];
-    B [label="B", fillcolor=lightskyblue];
-    C [label="C", fillcolor=lightskyblue];
-    A [label="A", fillcolor=lightskyblue];
-    T1 [label="T1", fillcolor=salmon, style="filled,dashed", xlabel="red, agrees"];
-    T2 [label="T2", fillcolor=salmon, style="filled,dashed", xlabel="red, agrees"];
-    CG [label="CG", fillcolor=orange, shape=doublecircle];
+    CG [label="CG", fillcolor=lightskyblue, shape=doublecircle];
 
-    // Edges point backwards (newer → older)
-    H -> E;
-    H -> C;
-    E -> B;
-    C -> A;
-    C -> T2;
-    T2 -> T1;
-    T1 -> B;
-    B -> CG;
-    A -> CG;
+    Virtual [label="Virtual", shape=circle, style="dotted,filled", fillcolor=lightskyblue];
 
-    subgraph cluster_legend {
-        style=invis;
-        L_BLUE [label="Blue (honest cluster)", fillcolor=lightskyblue, shape=box, style=filled, fontsize=9];
-        L_RED [label="Red (attacker, agrees with honest)\n→ neutralized as gray", fillcolor=salmon, shape=box, style="filled,dashed", fontsize=9];
-        L_CG [label="Conflict Genesis", fillcolor=orange, shape=box, style=filled, fontsize=9];
+    // Left side: non-agreeing side (all red)
+    subgraph cluster_left {
+        label="Non-agreeing side";
+        labelloc=t;
+        style="dashed";
+        color=red;
+        B [label="B", fillcolor=salmon];
+        D [label="D", fillcolor=salmon];
+        F [label="F", fillcolor=salmon];
+        T1 [label="T1", fillcolor=salmon];
     }
+
+    // Right side: agreeing side (blue chain + red non-blue blocks)
+    subgraph cluster_right {
+        label="Agreeing side";
+        labelloc=t;
+        style="dashed";
+        color=blue;
+        C [label="C", fillcolor=lightskyblue];
+        E [label="E", fillcolor=lightskyblue];
+        G [label="G", fillcolor=salmon, xlabel="red, agrees"];
+        T2 [label="T2", fillcolor=salmon, xlabel="red, agrees"];
+        H [label="H", fillcolor=lightskyblue];
+        T3 [label="T3", fillcolor=lightskyblue];
+    }
+
+    CG_lbl [label="conflict genesis", shape=plaintext, style=filled, fillcolor=none, fontsize=10, fontcolor=gray40, width=0];
+
+    NOTE [label="Blue chain (K=0 honest cluster):\nVirtual → T3 → H → E → C → CG\n\nT2 and G are red (excluded from cluster)\n  but agree with the honest subgroup\n\nWithout gray-blocks, T2 and G would\n  vote negatively and make K=0 appear\n  insufficient, hurting the honest subgroup", shape=box, style=filled, fillcolor=lightcyan, fontsize=9, width=7];
+
+    // Blue chain-parent edges (honest cluster chain)
+    D -> B [color=gray60, penwidth=2.0];
+    F -> D [color=gray60, penwidth=2.0];
+    T1 -> F [color=gray60, penwidth=2.0];
+    E -> C [color=blue, penwidth=2.0];
+    H -> E [color=blue, penwidth=2.0];
+    T3 -> H [color=blue, penwidth=2.0];
+
+    B -> CG [color=gray60, penwidth=2.0];
+    C -> CG [color=blue, penwidth=2.0];
+
+    // Red non-blue blocks: T2 and G agree with honest side
+    T2 -> G [color=gray60, penwidth=1.0];
+    G -> E [color=gray60, penwidth=1.0];
+
+    // Cross edges
+    T2 -> H [color=gray60, penwidth=1.0, style=dashed];
+    F -> C [color=gray60, penwidth=1.0, style=dashed];
+    E -> B [color=gray60, penwidth=1.0, style=dashed];
+
+    CG -> CG_lbl [style=invis];
+    CG_lbl -> NOTE [style=invis];
+
+    Virtual -> T1 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T2 [color=gray60, penwidth=1.0, style=dashed];
+    Virtual -> T3 [color=gray60, penwidth=1.0, style=dashed];
 }

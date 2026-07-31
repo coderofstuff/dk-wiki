@@ -1,30 +1,70 @@
 digraph free_vs_committed {
-    rankdir=RL;
-    nodesep=0.5;
-    ranksep=0.4;
+    rankdir=TB;
+    nodesep=0.8;
+    ranksep=0.1;
     node [shape=circle, style=filled, fontsize=10, width=0.6, height=0.6];
     edge [arrowsize=0.6, color=gray60];
 
     label="Free Search vs Committed Search";
 
-    V [label="Virtual", fillcolor=lightyellow, shape=box, width=1.0, height=0.5];
+    CG [label="CG", fillcolor=orange, shape=doublecircle];
 
-    B [label="B", fillcolor=lightskyblue];
-    C [label="C", fillcolor=lightyellow];
-    D [label="D", fillcolor=lightskyblue];
-    E [label="E", fillcolor=lightyellow];
-    F [label="F", fillcolor=orange, shape=doublecircle, xlabel="conflict genesis"];
+    Virtual [label="Virtual", shape=circle, style=dotted, fillcolor=white];
 
-    // Edges point backwards (newer → older)
-    V -> B;
-    V -> C;
-    B -> D [color=blue, penwidth=2.0];
-    C -> E [style=dashed, color=red];
-    D -> F [color=blue, penwidth=2.0];
-    E -> F [style=dashed, color=red];
-
-    subgraph cluster_annotation {
-        style=invis;
-        NOTE [label="Committed (free_search=false):\n  Only follows agreeing parents\n  Virtual → C → E → F\n\nFree Search (free_search=true):\n  Considers ALL parents\n  Picks parent with max blue work\n  Virtual → B → D → F", shape=box, style=filled, fillcolor=lightcyan, fontsize=9];
+    subgraph cluster_left {
+        label="Free search path";
+        labelloc=t;
+        style="dashed";
+        color=blue;
+        B [label="B", fillcolor=lightskyblue];
+        D [label="D", fillcolor=lightskyblue];
+        F [label="F", fillcolor=lightskyblue];
+        T1 [label="T1", fillcolor=lightskyblue];
     }
+
+    subgraph cluster_right {
+        label="Committed search path";
+        labelloc=t;
+        style="dashed";
+        color=red;
+        C [label="C", fillcolor=lightgray];
+        E [label="E", fillcolor=lightgray];
+        G [label="G", fillcolor=lightgray];
+        T2 [label="T2", fillcolor=lightgray];
+        H [label="H", fillcolor=lightgray];
+        T3 [label="T3", fillcolor=lightgray];
+    }
+
+    CG_lbl [label="conflict genesis", shape=plaintext, style=filled, fillcolor=none, fontsize=10, fontcolor=gray40, width=0];
+
+    NOTE [label="Committed (free_search=false):\n  Only follows agreeing parents\n  Virtual → T2 → G → E → C → CG\n  (shown in red dashed)\n\nFree Search (free_search=true):\n  Considers ALL parents\n  Picks parent with max blue work\n  Virtual → T1 → F → D → B → CG\n  (shown in blue)", shape=box, style=filled, fillcolor=lightcyan, fontsize=9, width=7];
+
+    // Blue edges = free search path (left side chain-parent)
+    D -> B [color=blue, penwidth=2.0];
+    F -> D [color=blue, penwidth=2.0];
+    T1 -> F [color=blue, penwidth=2.0];
+    B -> CG [color=blue, penwidth=2.0];
+
+    // Red dashed edges = committed search path (right side chain-parent)
+    E -> C [color=red, penwidth=2.0, style=dashed];
+    G -> E [color=red, penwidth=2.0, style=dashed];
+    T2 -> G [color=red, penwidth=2.0, style=dashed];
+    C -> CG [color=red, penwidth=2.0, style=dashed];
+
+    // Remaining chain-parent edges (right side non-committed)
+    H -> E [color=gray60, penwidth=1.0];
+    T3 -> H [color=gray60, penwidth=1.0];
+
+    // Cross edges (gray dashed)
+    T2 -> H [color=gray60, penwidth=1.0, style=dashed];
+    F -> C [color=gray60, penwidth=1.0, style=dashed];
+    E -> B [color=gray60, penwidth=1.0, style=dashed];
+
+    CG -> CG_lbl [style=invis];
+    CG_lbl -> NOTE [style=invis];
+
+    Virtual -> T1 [color=blue, penwidth=2.0];
+    Virtual -> T2 [color=red, penwidth=2.0, style=dashed];
+    Virtual -> T3 [color=gray60, penwidth=1.0, style=dashed];
+
 }
